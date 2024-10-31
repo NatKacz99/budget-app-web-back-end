@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>480</x>
+      <y>270</y>
+      <w>110</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Uzytkownicy
+-
+id_uzytkownika
+login
+haslo 
+e-mail</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>720</x>
+      <y>260</y>
+      <w>120</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>Wydatki
+-
+rodzaj_wydatku
+data_wydatku
+kwota_wydatku
+sposob_platnosci
+komentarz
+id_uzytkownika</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>580</x>
+      <y>300</y>
+      <w>160</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;140.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>510</x>
+      <y>360</y>
+      <w>30</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>460</x>
+      <y>480</y>
+      <w>120</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>Przychody
+-
+rodzaj_przychodu
+data_przychodu
+kwota_przychodu
+komentarz
+sposob_płatnosci
+id_uzytkownika</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>770</x>
+      <y>380</y>
+      <w>30</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>570</x>
+      <y>520</y>
+      <w>170</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;150.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>720</x>
+      <y>510</y>
+      <w>130</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>Bilans
+-
+przedzial_czasowy
+id_uzytkownika</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

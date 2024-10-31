@@ -159,112 +159,116 @@
     </section>
 
     <article>
-        <section>
-            <form id="form_balance">
-                <div class="check-period">
-                    <div>
-                        <label for="time-slot">Wybierz przedział czasowy:
-                            <select id="time-slot">
-                                <option>bieżący miesiąc</option>
-                                <option>poprzedni miesiąc</option>
-                                <option>bieżący rok</option>
-                                <option id="non-standard">niestandardowy</option>
-                            </select>
-                        </label>
-                    </div>
-                    <div class="differnet-term">
-                        <label for="range">Podaj interesujący Cię zakres dat:
-                            <input type="text" id="range">
-                        </label>
-                        <input type="button" value="Wybierz okres">
-                    </div>
-                </div>
-            </form>
-        </section>
+        <div class="container-outside">
+            <div class="container-inside">
+                <section>
+                    <form id="form_balance">
+                        <div class="check-period">
+                            <div>
+                                <label for="time-slot">Wybierz przedział czasowy:
+                                    <select id="time-slot">
+                                        <option>bieżący miesiąc</option>
+                                        <option>poprzedni miesiąc</option>
+                                        <option>bieżący rok</option>
+                                        <option id="non-standard">niestandardowy</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="differnet-term">
+                                <label for="range">Podaj interesujący Cię zakres dat:
+                                    <input type="text" id="range">
+                                </label>
+                                <input type="button" value="Wybierz okres">
+                            </div>
+                        </div>
+                    </form>
+                </section>
 
-        <section>
-            <div class="balance">
-                <div class="tables-incomings-expenses">
-                    <div>
-                        <h3>Przychody</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th class="header-category">Kategoria</th>
-                                    <th class="header-amount">Kwota</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="category">wynagrodzenie</td>
-                                    <td>6000</td>
-                                </tr>
-                                <tr>
-                                    <td class="category">sprzedaż na allegro</td>
-                                    <td>100</td>
-                                </tr>
-                                <tr>
-                                    <td class="sum">Suma</td>
-                                    <td>6100</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <section>
+                    <div class="balance">
+                        <div class="tables-incomings-expenses">
+                            <div>
+                                <h3>Przychody</h3>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th class="header-category">Kategoria</th>
+                                            <th class="header-amount">Kwota</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="category">wynagrodzenie</td>
+                                            <td>6000</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="category">sprzedaż na allegro</td>
+                                            <td>100</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sum">Suma</td>
+                                            <td>6100</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div>
+                                <h3>Wydatki</h3>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th class="header-category">Kategoria</th>
+                                            <th class="header-amount">Kwota</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="category">jedzenie</td>
+                                            <td>500</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="category">rozrywka</td>
+                                            <td>200</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="category">transport</td>
+                                            <td>400</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sum">Suma</td>
+                                            <td>1100</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="charts">
+                            <div class="pie-chart-incomings-container">
+                                <canvas id="pie-chart-incomings" width="200" height="200">
+                                </canvas>
+                                <ul id="pie-chart-legend__incomings"></ul>
+                            </div>
+
+                            <div class="pie-chart-expenses-container">
+                                <canvas id="pie-chart-expenses" width="200" height="200">
+                                </canvas>
+                                <ul id="pie-chart-legend__expenses"></ul>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3>Bilans</h3>
+                            <span>
+                                <h3>5000</h3>
+                            </span>
+                        </div>
+
                     </div>
-
-                    <div>
-                        <h3>Wydatki</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th class="header-category">Kategoria</th>
-                                    <th class="header-amount">Kwota</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="category">jedzenie</td>
-                                    <td>500</td>
-                                </tr>
-                                <tr>
-                                    <td class="category">rozrywka</td>
-                                    <td>200</td>
-                                </tr>
-                                <tr>
-                                    <td class="category">transport</td>
-                                    <td>400</td>
-                                </tr>
-                                <tr>
-                                    <td class="sum">Suma</td>
-                                    <td>1100</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="charts">
-                    <div class="pie-chart-incomings-container">
-                        <canvas id="pie-chart-incomings" width="200" height="200">
-                        </canvas>
-                        <ul id="pie-chart-legend__incomings"></ul>
-                    </div>
-
-                    <div class="pie-chart-expenses-container">
-                        <canvas id="pie-chart-expenses" width="200" height="200">
-                        </canvas>
-                        <ul id="pie-chart-legend__expenses"></ul>
-                    </div>
-                </div>
-
-                <div>
-                    <h3>Bilans</h3>
-                    <span>
-                        <h3>5000</h3>
-                    </span>
-                </div>
-
+                </section>
             </div>
-        </section>
+        </div>
     </article>
 </body>
 

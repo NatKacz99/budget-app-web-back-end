@@ -241,6 +241,11 @@ input[value="Wybierz okres"]:hover {
         margin-top: 40px;
     }
 
+    input[type="text"]:focus{
+        outline: none;
+        box-shadow: 0 0 10px rgb(17, 53, 48);
+    }
+
     input[value="Wybierz okres"] {
         width: 100px
     }

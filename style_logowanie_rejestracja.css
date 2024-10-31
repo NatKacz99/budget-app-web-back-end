@@ -6,3 +6,12 @@ body{
   height: 58px;
   background-color: rgb(174, 202, 193);
 }
+
+.btn-primary{
+  background-color: green;
+  border: none
+}
+
+.btn-primary:hover{
+  background-color: rgb(37, 98, 24);
+}
