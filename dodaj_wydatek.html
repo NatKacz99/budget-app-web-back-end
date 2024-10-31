@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dodaj wydatek</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    
+
+    <link rel="stylesheet" href="style_dodaj_wydatek.css">
+    <link rel="stylesheet" href="./css/cap.css">
+
+    <script>
+        $(function () {
+            $(".datepicker").datepicker({
+                dateFormat: "yy-mm-dd"
+            });
+
+            $(".menu-mobile__collapsible").on("click", function () {
+                let $menuList = $(".menu-mobile__list");
+
+                if ($menuList.hasClass("hidden")) {
+                    $menuList.removeClass("hidden");
+                } else {
+                    $menuList.addClass("hidden");
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <section>
+        <nav id="menu-desktop">
+            <ul class="menu-desktop__list">
+                <li><a href="index.html" class="main-page"><i class="icon-home"></i>Strona główna</a></li>
+                <li><a href="#" class="add-incoming"><i class="icon-dollar"></i>Dodaj przychód</a></li>
+                <li><a href="dodaj_wydatek.html" class="add-expense"><i class="icon-basket"></i>Dodaj wydatek</a></li>
+                <li><a href="bilans.html" class="review-balance"><i class="icon-calc"></i>Przeglądaj bilans</a></li>
+                <li><a href="#" class="settings"><i class="icon-cog"></i>Ustawienia</a></li>
+                <li><a href="#" class="log-out"><i class="icon-logout"></i>Wyloguj się</a></li>
+            </ul>
+        </nav>
+
+        <nav id="menu-mobile">
+            <button class="menu-mobile__collapsible">
+                <img src="menu_ikona.svg" alt="hamburger menu">
+            </button>
+            <ul class="menu-mobile__list hidden">
+                <li><a href="index.html" class="main-page"><i class="icon-home"></i>Strona główna</a></li>
+                <li><a href="#" class="add-incoming"><i class="icon-dollar"></i>Dodaj przychód</a></li>
+                <li><a href="dodaj_wydatek.html" class="add-expense"><i class="icon-basket"></i>Dodaj wydatek</a></li>
+                <li><a href="bilans.html" class="review-balance"><i class="icon-calc"></i>Przeglądaj bilans</a></li>
+                <li><a href="#" class="settings"><i class="icon-cog"></i>Ustawienia</a></li>
+                <li><a href="#" class="log-out"><i class="icon-logout"></i>Wyloguj się</a></li>
+            </ul>
+        </nav>
+    </section>
+
+    <article>
+        <form>
+            <h2>Wprowadź dane</h2>
+            <div class="container">
+
+                <div class="input-group">
+                    <span class="icon-container"><i class="icon-pencil"></i></span>
+                    <input type="text" class="form-control" placeholder="Kwota">
+                </div>
+
+                <div class="input-group">
+                    <span class="icon-container"><i class="icon-calendar"></i></span>
+                    <input type="text" class="datepicker form-control" placeholder="Data">
+                </div>
+
+                <div>
+                    <label for="payment-method">
+                        <select class="payment-method">
+                            <option selected disabled>Wybierz sposób płatności</option>
+                            <option>Gotówka</option>
+                            <option>Karta debetowa</option>
+                            <option>Karta kredytowa</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div>
+                    <label for="category">
+                        <select class="category">
+                            <option selected disabled>Wybierz kategorię wydatku</option>
+                            <option>Jedzenie</option>
+                            <option>Mieszkanie</option>
+                            <option>Transport</option>
+                            <option>Telekomunikacja</option>
+                            <option>Opieka zdrowotna</option>
+                            <option>Ubranie</option>
+                            <option>Higiena</option>
+                            <option>Dzieci</option>
+                            <option>Rozrywka</option>
+                            <option>Wycieczka</option>
+                            <option>Szkolenia</option>
+                            <option>Książki</option>
+                            <option>Oszczędności</option>
+                            <option>Na złotą jesień, czyli emeryturę</option>
+                            <option>Spłata długów</option>
+                            <option>Darowizna</option>
+                            <option>Inne wydatki</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="input-group">
+                    <span class="icon-container"><i class="icon-pencil"></i></span>
+                    <input type="text" class="form-control" placeholder="Komentarz (opcjonalnie)">
+                </div>
+
+                <div class="buttons">
+                    <input type="submit" value="Dodaj">
+                    <input type="submit" value="Anuluj">
+                </div>
+
+            </div>
+        </form>
+
+    </article>
+
+</body>
+
+</html>

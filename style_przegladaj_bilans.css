@@ -1,0 +1,323 @@
+body {
+    background-color: rgb(76, 141, 141);
+}
+
+.container-outside {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px
+}
+
+.container-inside {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: rgba(14, 69, 69, 0.5);
+    width: 80%;
+    border-radius: 15px;
+}
+
+.menu-desktop__list {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+li {
+    list-style: none;
+    display: block;
+}
+
+#menu-desktop {
+    background-color: rgb(174, 202, 193);
+    padding: 20px;
+    margin-bottom: 20px
+}
+
+#menu-mobile {
+    display: none;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+input {
+    border-radius: 5px
+}
+
+option {
+    border-radius: 5px;
+}
+
+.check-period {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-right: 20px;
+}
+
+th,
+td {
+    border: 1px solid black;
+    padding: 8px;
+}
+
+input[type="text"],
+select {
+    width: 200px;
+    height: 20px
+}
+
+input[type="button"] {
+    background-color: green;
+    color: white;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+form {
+    line-height: 30px
+}
+
+.sum {
+    font-weight: 700;
+}
+
+.balance {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    margin: 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tables-incomings-expenses {
+    display: flex;
+    flex-direction: row;
+    gap: 90px;
+    margin-bottom: 60px;
+    align-items: flex-start;
+}
+
+h3 {
+    text-align: center;
+}
+
+span {
+    color: rgb(200, 20, 20)
+}
+
+.charts {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+.header-category {
+    background-color: rgb(165, 60, 19);
+}
+
+.header-amount {
+    background-color: rgb(128, 37, 212);
+}
+
+.pie-chart-incomings-container,
+.pie-chart-expenses-container {
+    width: 100%;
+}
+
+.pie-chart-expenses-container {
+    margin-left: 80px;
+}
+
+.legend-item {
+    display: flex;
+    margin-top: 20px;
+    gap: 15px;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+#pie-chart-legend__incomings,
+#pie-chart-legend__expenses {
+    text-align: left;
+    margin: 0;
+    padding: 0
+}
+
+input[value="Wybierz okres"]:hover {
+    cursor: pointer;
+    background-color: rgb(37, 98, 24);
+}
+
+@media(max-width: 768px) {
+    #menu-desktop {
+        display: none;
+    }
+
+    #menu-mobile {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .menu-mobile__list {
+        position: absolute;
+        top: 40px;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        border-radius: 12px;
+        width: 200px;
+        background-color: #f1f1f1;
+        max-height: 230px;
+        overflow: hidden;
+        transition: max-height 0.5s ease-in-out;
+    }
+
+    .menu-mobile__list>li>a {
+        display: block;
+        color: #000;
+        padding: 8px 16px;
+        text-decoration: none;
+        text-align: center;
+    }
+
+    .menu-mobile__list>li>a:hover {
+        background-color: #555;
+        color: white;
+    }
+
+    .menu-mobile__collapsible {
+        cursor: pointer;
+    }
+
+    .hidden {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease-out;
+    }
+
+    .check-period {
+        margin-top: 50px;
+        padding-left: 20px;
+    }
+
+    .tables-incomings-expenses {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .differnet-term {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin: 0;
+        padding: 0
+    }
+
+    .charts {
+        flex-direction: column;
+    }
+
+    .pie-chart-expenses-container {
+        margin-left: 0;
+        margin-top: 40px;
+    }
+
+    input[value="Wybierz okres"] {
+        width: 100px
+    }
+}
+
+@media(width < 576px) {
+    .container-outside {
+        width: 100%;
+        position: relative;
+    }
+
+    .container-inside {
+        width: 100%;
+        flex: 1;
+        position: relative;
+        box-sizing: border-box;
+    }
+
+    .check-period {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    .check-period input[type="text"],
+    .check-period select {
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .menu-mobile__list {
+        z-index: 20
+    }
+
+    .container-inside {
+        padding-left: 15px;
+        padding-right: 15px
+    }
+
+    .pie-chart-incomings-container,
+    .pie-chart-expenses-container {
+        box-sizing: border-box;
+    }
+
+    .charts {
+        position: relative;
+    }
+
+    #pie-chart-incomings {
+        display: block;
+        max-width: 160px;
+        margin: 0 auto;
+        height: auto
+    }
+
+    #pie-chart-expenses {
+        display: block;
+        max-width: 160px;
+        margin: 0 auto;
+        height: auto
+    }
+
+    .legend-color {
+        flex-shrink: 0
+    }
+
+    .tables-incomings-expenses {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    input[value="Wybierz okres"] {
+        margin-top: 10px
+    }
+
+}
