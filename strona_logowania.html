@@ -19,7 +19,7 @@
 <body class="d-flex align-items-center py-4 justify-content-center">
 
   <main class="form-signin w-100 m-auto" style="max-width: 400px;">
-    <form>
+    <form action="zaloguj.php" method="post">
       <h1 class="text-center pb-4">Logowanie</h1>
 
       <div class="container">
@@ -28,7 +28,7 @@
             <i class="icon-mail-alt"></i>
           </span>
           <div class="form-floating">
-            <input type="email" class="form-control mb-1" id="floatingInput" placeholder="name@example.com">
+            <input type="email" name="e-mail" class="form-control mb-1" id="floatingInput" placeholder="name@example.com">
             <label for="floatingInput">Adres e-mail</label>
           </div>
         </div>
@@ -37,7 +37,7 @@
           <i class="icon-lock-filled"></i>
         </span>
         <div class="form-floating">
-          <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+          <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password">
           <label for="floatingPassword">Hasło</label>
         </div>
       </div>

@@ -51,6 +51,8 @@
           </div>
         </div>
 
+        $secret = "6LeWdloqAAAAAB3GgdokbP8w9rT5cXizEVYE7M2y";
+
         <button class="btn btn-primary w-100 py-2 mt-4" type="submit">Zarejestruj się</button>
       </div>
     </form>
