@@ -10,7 +10,17 @@ if (isset($_POST['e-mail'])) {
 
   if ($password1 !== $password2) {
     $all_OK = false;
-    $_SESSION['error_password2'] = "Podane hasła nie są identyczne.";
+    $_SESSION['error_password1'] = "Podane hasła nie są identyczne.";
+  }
+
+  if(strlen($password1) < 8){
+    $all_OK = false;
+    $_SESSION['error_password2'] = "Hasło powinno zawierać przynajmniej 8 znaków.";
+  }
+
+  if(!preg_match('~[0-9]+~', $password1)){
+    $all_OK = false;
+    $_SESSION['error_password3'] = "Hasło powinno mieć przynajmniej jedną cyfrę.";
   }
 }
 
@@ -86,6 +96,24 @@ if (isset($_POST['e-mail'])) {
                 if (isset($_SESSION['error_password2'])) {
                   echo $_SESSION['error_password2'];
                   unset($_SESSION['error_password2']);
+                }
+              ?>
+        </div>
+
+        <div class="error">
+              <?php
+                if (isset($_SESSION['error_password3'])) {
+                  echo $_SESSION['error_password3'];
+                  unset($_SESSION['error_password3']);
+                }
+              ?>
+        </div>
+
+        <div class="error">
+              <?php
+                if (isset($_SESSION['error_password1'])) {
+                  echo $_SESSION['error_password1'];
+                  unset($_SESSION['error_password1']);
                 }
               ?>
         </div>
