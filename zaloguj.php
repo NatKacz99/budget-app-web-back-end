@@ -1,5 +1,11 @@
 <?php
 
+	if((!isset($_POST['e-mail'])) || (!isset($_POST['password'])))
+	{
+		header('Location: index.html');
+		exit();
+	}
+
 	require_once "connect.php";
 	
 	try{
@@ -11,10 +17,8 @@
 		}
 
 		else{
-			$mail = $_POST['e-mail'];
+			$email = $_POST['e-mail'];
 			$password = $_POST['password'];
-
-			echo "It works";
 
 			$connect->close();
 		}
