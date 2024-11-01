@@ -5,6 +5,14 @@ session_start();
 if (isset($_POST['e-mail'])) {
   $all_OK = true;
 
+  $email = $_POST['e-mail'];
+
+  $email_for_validation = filter_var($email, FILTER_SANITIZE_EMAIL);
+  if(filter_var($email_for_validation, FILTER_VALIDATE_EMAIL) == false || $email_for_validation != $email){
+    $all_OK = false;
+    $_SESSION['error_email'] = "Niepoprawny adres e-mail.";
+  }
+
   $password1 = $_POST['password1'];
   $password2 = $_POST['password2'];
 
@@ -21,6 +29,10 @@ if (isset($_POST['e-mail'])) {
   if(!preg_match('~[0-9]+~', $password1)){
     $all_OK = false;
     $_SESSION['error_password3'] = "Hasło powinno mieć przynajmniej jedną cyfrę.";
+  }
+
+  if($all_OK == true){
+    $_SESSION['success_message'] = 'Rejestracja przebiegła pomyślnie. Możesz zalogować się na swoje konto.&nbsp;<a href="strona_logowania.html" style="text-decoration: none;">[Zaloguj się.]</a>';
   }
 }
 
@@ -57,7 +69,7 @@ if (isset($_POST['e-mail'])) {
             <i class="icon-user"></i>
           </span>
           <div class="form-floating">
-            <input type="text" class="form-control mb-1" class="floatingInput" placeholder="Name">
+            <input type="text" class="form-control mb-2" class="floatingInput" placeholder="Name">
             <label for="floatingInput">Imię</label>
           </div>
         </div>
@@ -66,16 +78,29 @@ if (isset($_POST['e-mail'])) {
             <i class="icon-mail-alt"></i>
           </span>
           <div class="form-floating">
-            <input type="text" name="e-mail" class="form-control mb-1" class="floatingInput" placeholder="E-mail">
+            <input type="text" name="e-mail" class="form-control" class="floatingInput" placeholder="E-mail">
             <label for="floatingInput">Adres e-mail</label>
           </div>
         </div>
+
+        <div class="error">
+          <?php
+
+            if (isset($_SESSION['error_email'])){
+              echo $_SESSION['error_email'];
+              unset($_SESSION['error_email']);
+            }
+
+          ?>
+
+        </div>
+
         <div class="input-group">
           <span class="input-group-text">
             <i class="icon-lock-filled"></i>
           </span>
           <div class="form-floating">
-            <input type="password" name="password1" class="form-control mb-1" id="password1"
+            <input type="password" name="password1" class="form-control mb-2" id="password1"
               placeholder="Password">
             <label for="floatingPassword">Hasło</label>
           </div>
@@ -121,6 +146,15 @@ if (isset($_POST['e-mail'])) {
 
         <button class="btn btn-primary w-100 py-2 mt-4" type="submit">Zarejestruj się</button>
       </div>
+
     </form>
+    <div class="text-center mt-3">
+      <?php
+        if (isset($_SESSION['success_message'])) {
+          echo '<div class="alert alert-success">' . $_SESSION['success_message'] . '</div>';
+          unset($_SESSION['success_message']);
+        }
+      ?>
+    </div>
   </main>
 </body>
