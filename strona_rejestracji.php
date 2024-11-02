@@ -5,6 +5,8 @@ session_start();
 if (isset($_POST['e-mail'])) {
   $all_OK = true;
 
+  $username = $_POST['username'];
+
   $email = $_POST['e-mail'];
 
   $email_for_validation = filter_var($email, FILTER_SANITIZE_EMAIL);
@@ -31,9 +33,45 @@ if (isset($_POST['e-mail'])) {
     $_SESSION['error_password3'] = "Hasło powinno mieć przynajmniej jedną cyfrę.";
   }
 
-  if($all_OK == true){
-    $_SESSION['success_message'] = 'Rejestracja przebiegła pomyślnie. Możesz zalogować się na swoje konto.&nbsp;<a href="strona_logowania.html" style="text-decoration: none;">[Zaloguj się.]</a>';
+  $password_hash = password_hash($password1, PASSWORD_DEFAULT);
+
+  require_once "connect.php";
+	mysqli_report(MYSQLI_REPORT_STRICT);
+  
+  try{
+    $connection = new mysqli($host, $db_user, $db_password, $db_name);
+    
+    if($connection->connect_errno!=0){
+      throw new Exception(mysqli_connect_errno());
+    }
+    else{
+      $score = $connection->query("SELECT id FROM users WHERE email = '$email'");
+      if(!$score){
+        throw new Exception($connection->error);
+      }
+      
+      $how_many_mails = $score->num_rows;
+      if($how_many_mails > 0){
+        $all_OK = false;
+        $_SESSION['error_mail'] = "Istnieje już konto o podanym adresie e-mail.";
+      }
+
+    if($all_OK == true){
+      if($connection->query("INSERT INTO users VALUES(NULL, '$username', '$password_hash', '$email')")){
+        $_SESSION['success_message'] = 'Rejestracja przebiegła pomyślnie. Możesz zalogować się na swoje konto.&nbsp;<a  href="strona_logowania.html" style="text-decoration: none;">[Zaloguj się.]</a>';
+      }
+      else{
+            throw new Exception($connection->error);
+      }
+    }
+      $connection->close();
+    }
   }
+    catch(Exception $error){
+      echo '<span style = "color: red">Błąd serwera! Przepraszamy za niedogodności i prosimy o rejestrację w innym możliwym terminie.</span>';
+
+    }
+
 }
 
 ?>
@@ -69,7 +107,7 @@ if (isset($_POST['e-mail'])) {
             <i class="icon-user"></i>
           </span>
           <div class="form-floating">
-            <input type="text" class="form-control mb-2" class="floatingInput" placeholder="Name">
+            <input type="text" name="username" class="form-control mb-2" class="floatingInput" placeholder="Name">
             <label for="floatingInput">Imię</label>
           </div>
         </div>
