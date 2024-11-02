@@ -7,6 +7,11 @@ if (isset($_POST['e-mail'])) {
 
   $username = $_POST['username'];
 
+  if (ctype_alnum($username) == false) {
+    $all_OK = false;
+    $_SESSION['error_username'] = "Nazwa może się składać tylko z liter i cyfr (bez polskich znaków).";
+  }
+
   $email = $_POST['e-mail'];
 
   $email_for_validation = filter_var($email, FILTER_SANITIZE_EMAIL);
@@ -107,10 +112,22 @@ if (isset($_POST['e-mail'])) {
             <i class="icon-user"></i>
           </span>
           <div class="form-floating">
-            <input type="text" name="username" class="form-control mb-2" class="floatingInput" placeholder="Name">
+            <input type="text" name="username" class="form-control" class="floatingInput" placeholder="Name">
             <label for="floatingInput">Imię</label>
           </div>
         </div>
+
+        <div class="error">
+          <?php
+
+            if (isset($_SESSION['error_username'])){
+              echo $_SESSION['error_username'];
+              unset($_SESSION['error_username']);
+            }
+
+          ?>
+        </div>
+
         <div class="input-group">
           <span class="input-group-text">
             <i class="icon-mail-alt"></i>
