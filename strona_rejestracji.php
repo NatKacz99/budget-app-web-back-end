@@ -40,6 +40,15 @@ if (isset($_POST['e-mail'])) {
 
   $password_hash = password_hash($password1, PASSWORD_DEFAULT);
 
+  $secret_key = "6LeWdloqAAAAAB3GgdokbP8w9rT5cXizEVYE7M2y";
+  $check = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret_key.'&response='.$_POST['g-recaptcha-response']);
+
+  $answer = json_decode($check);
+  if($answer->success == false){
+      $all_OK = false;
+      $_SESSION['error_bot'] = "Potwierdź, że nie jesteś botem.";
+  }
+
   require_once "connect.php";
 	mysqli_report(MYSQLI_REPORT_STRICT);
   
@@ -94,6 +103,7 @@ if (isset($_POST['e-mail'])) {
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
   <link rel="stylesheet" href="style_logowanie_rejestracja.css">
   <link rel="stylesheet" href="./css/cap.css">
@@ -198,6 +208,18 @@ if (isset($_POST['e-mail'])) {
               ?>
         </div>
 
+        <div class="g-recaptcha" data-sitekey="6LeWdloqAAAAAHZHEw0P1JfZ_wvMLXIvrjh0ZaaP"></div>
+		
+          <?php
+          
+            if(isset($_SESSION['error_bot'])){
+              echo '<div class = "error">'.$_SESSION['error_bot'].'</div>';
+              unset($_SESSION['error_bot']);
+            }
+            
+          ?>
+		
+		<br />
 
         <button class="btn btn-primary w-100 py-2 mt-4" type="submit">Zarejestruj się</button>
       </div>
