@@ -7,6 +7,7 @@ if ((!isset($_POST['e-mail'])) || (!isset($_POST['password']))) {
     exit();
 }
 
+
 require_once "connect.php";
 
 try {
@@ -31,11 +32,17 @@ try {
             if ($how_many_users > 0) {
                 $row = $result->fetch_assoc();
 
+                var_dump($row);
+
                 if (password_verify($password, $row['password'])) {
                     $_SESSION['logged'] = true;
+                    $_SESSION['user_id'] = $row['id'];
+                    $_SESSION['username'] = $row['username'];
                     unset($_SESSION['error_log_in']);
                     $result->free_result();
-                    header('Location: menu_glowne.html');
+
+
+                    header('Location: menu_glowne.php');
                     exit();
                 } else {
                     $_SESSION['error_log_in'] = '<span style="color: red">Nieprawidłowy e-mail lub hasło!</span>';

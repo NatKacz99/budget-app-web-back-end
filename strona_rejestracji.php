@@ -52,39 +52,61 @@ if (isset($_POST['e-mail'])) {
   require_once "connect.php";
 	mysqli_report(MYSQLI_REPORT_STRICT);
   
-  try{
+  try {
+
     $connection = new mysqli($host, $db_user, $db_password, $db_name);
     
-    if($connection->connect_errno!=0){
-      throw new Exception(mysqli_connect_errno());
-    }
-    else{
-      $score = $connection->query("SELECT id FROM users WHERE email = '$email'");
-      if(!$score){
-        throw new Exception($connection->error);
-      }
-      
-      $how_many_mails = $score->num_rows;
-      if($how_many_mails > 0){
-        $all_OK = false;
-        $_SESSION['error_mail'] = "Istnieje już konto o podanym adresie e-mail.";
-      }
-
-    if($all_OK == true){
-      if($connection->query("INSERT INTO users VALUES(NULL, '$username', '$password_hash', '$email')")){
-        $_SESSION['success_message'] = 'Rejestracja przebiegła pomyślnie. Możesz zalogować się na swoje konto.&nbsp;<a  href="strona_logowania.html" style="text-decoration: none;">[Zaloguj się.]</a>';
-      }
-      else{
+    if ($connection->connect_errno != 0) {
+        throw new Exception(mysqli_connect_errno());
+    } else {
+        $score = $connection->query("SELECT id FROM users WHERE email = '$email'");
+        if (!$score) {
             throw new Exception($connection->error);
-      }
-    }
-      $connection->close();
-    }
-  }
-    catch(Exception $error){
-      echo '<span style = "color: red">Błąd serwera! Przepraszamy za niedogodności i prosimy o rejestrację w innym możliwym terminie.</span>';
+        }
 
+        $how_many_mails = $score->num_rows;
+        if ($how_many_mails > 0) {
+            $all_OK = false;
+            $_SESSION['error_mail'] = "Istnieje już konto o podanym adresie e-mail.";
+        }
+
+        if ($all_OK == true) {
+            if ($connection->query("INSERT INTO users VALUES(NULL, '$username', '$password_hash', '$email')")) {
+                $user_id = $connection->insert_id; 
+
+                if ($user_id) {
+
+                    $insert_categories_query = "INSERT INTO expenses_category_assigned_to_users (user_id, name) 
+                                                 SELECT '$user_id', name FROM expenses_category_default";
+
+                    if (!$connection->query($insert_categories_query)) {
+                        throw new Exception("Błąd podczas dodawania kategorii wydatków: " . $connection->error);
+                    }
+
+                    $insert_payment_query = "INSERT INTO payment_methods_assigned_to_users (user_id, name) 
+                    SELECT '$user_id', name FROM payment_methods_default";
+
+                    if (!$connection->query($insert_payment_query)) {
+                        throw new Exception("Błąd podczas dodawania metody płatności: " . $connection->error);
+                    }
+                } else {
+                    throw new Exception("Błąd: Użytkownik nie został dodany.");
+                  }
+
+                $_SESSION['success_message'] = 'Rejestracja przebiegła pomyślnie. Możesz zalogować się na swoje konto.&nbsp;<a href="strona_logowania.php" style="text-decoration: none;">[Zaloguj się.]</a>';
+            } else {
+                throw new Exception("Błąd: Użytkownik nie został dodany.");
+            }
+        }
+
+        $connection->close();
     }
+} catch (Exception $error) {
+
+    echo '<span style="color: red">Błąd serwera! Przepraszamy za niedogodności i prosimy o rejestrację w innym możliwym terminie.</span>';
+    echo $error->getMessage();
+}
+
 
 }
 
@@ -122,7 +144,7 @@ if (isset($_POST['e-mail'])) {
             <i class="icon-user"></i>
           </span>
           <div class="form-floating">
-            <input type="text" name="username" class="form-control" class="floatingInput" placeholder="Name">
+            <input type="text" name="username" class="form-control mb-2" class="floatingInput" placeholder="Name" mb-2>
             <label for="floatingInput">Imię</label>
           </div>
         </div>
@@ -143,7 +165,7 @@ if (isset($_POST['e-mail'])) {
             <i class="icon-mail-alt"></i>
           </span>
           <div class="form-floating">
-            <input type="text" name="e-mail" class="form-control" class="floatingInput" placeholder="E-mail">
+            <input type="text" name="e-mail" class="form-control mb-2" class="floatingInput" placeholder="E-mail">
             <label for="floatingInput">Adres e-mail</label>
           </div>
         </div>

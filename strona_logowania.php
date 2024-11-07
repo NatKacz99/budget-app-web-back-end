@@ -4,7 +4,12 @@
 
   if((isset($_SESSION['logged'])) && ($_SESSION['logged'] == true))
 	{
-		header('Location: menu_glowne.html');
+    if(isset($_SESSION['username'])){
+      header('Location: menu_glowne.php');
+      exit();
+    }
+
+		header('Location: menu_glowne.php');
 		exit();
 	}
 
