@@ -20,10 +20,10 @@ body {
 
 .menu-desktop__list {
     display: flex;
-    justify-content: space-between;
-    margin: 0;
-    padding-left: 20px;
-    padding-right: 20px;
+    justify-content: space-between !important;
+    margin: 0 !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
 }
 
 li {
@@ -33,12 +33,12 @@ li {
 
 #menu-desktop {
     background-color: rgb(174, 202, 193);
-    padding: 20px;
-    margin-bottom: 20px
+    padding: 20px !important;
+    margin-bottom: 20px !important
 }
 
 #menu-mobile {
-    display: none;
+    display: none !important;
 }
 
 a {
@@ -166,6 +166,18 @@ input[value="Wybierz okres"]:hover {
     background-color: rgb(37, 98, 24);
 }
 
+.btn-custom-close {
+    background-color: #ff6347; /* Niestandardowy kolor dla przycisku Close */
+    color: #fff;
+    border-color: #ff6347;
+}
+
+.btn-custom-save {
+    background-color: #32cd32; /* Niestandardowy kolor dla przycisku Save */
+    color: #fff;
+    border-color: #32cd32;
+}
+
 @media(max-width: 768px) {
     #menu-desktop {
         display: none;
@@ -174,29 +186,29 @@ input[value="Wybierz okres"]:hover {
     #menu-mobile {
         display: flex;
         flex-direction: column;
-        align-items: flex-end;
+        align-items: flex-end !important;
     }
 
     .menu-mobile__list {
-        position: absolute;
-        top: 40px;
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        border-radius: 12px;
-        width: 200px;
-        background-color: #f1f1f1;
-        max-height: 230px;
+        position: absolute !important;
+        top: 40px !important;
+        list-style-type: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-radius: 12px !important;
+        width: 200px !important;
+        background-color: #f1f1f1 !important;
+        max-height: 230px !important;
         overflow: hidden;
         transition: max-height 0.5s ease-in-out;
     }
 
     .menu-mobile__list>li>a {
         display: block;
-        color: #000;
-        padding: 8px 16px;
+        color: #000 !important;
+        padding: 8px 16px !important;
         text-decoration: none;
-        text-align: center;
+        text-align: center !important;
     }
 
     .menu-mobile__list>li>a:hover {

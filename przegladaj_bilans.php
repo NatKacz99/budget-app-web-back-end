@@ -1,5 +1,7 @@
 <?php
 
+    session_start();
+
     if(!isset($_SESSION['logged']))
 	{
 		header('Location: strona_logowania.php');
@@ -20,22 +22,16 @@
     <title>Przeglądaj bilans</title>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <script src="./js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" href="style_przegladaj_bilans.css">
+    <link rel="stylesheet" href="./style_przegladaj_bilans.css">
     <link rel="stylesheet" href="./css/cap.css">
 
-    <script>
-        $(function () {
-            $(".menu-mobile__collapsible").on("click", function () {
-                let $menuList = $(".menu-mobile__list");
 
-                if ($menuList.hasClass("hidden")) {
-                    $menuList.removeClass("hidden");
-                } else {
-                    $menuList.addClass("hidden");
-                }
-            });
-        });
+    <script>
 
         document.addEventListener("DOMContentLoaded", function () {
             showPieChartIncomings();
@@ -137,6 +133,31 @@
             }
         }
 
+        $(function () {
+            $(".datepicker").datepicker({
+                dateFormat: "yy-mm-dd"
+            });
+
+            $(".menu-mobile__collapsible").on("click", function () {
+                let $menuList = $(".menu-mobile__list");
+
+                if ($menuList.hasClass("hidden")) {
+                    $menuList.removeClass("hidden");
+                } else {
+                    $menuList.addClass("hidden");
+                }
+            });
+        });
+
+        $(document).ready(function () {
+        $("#time-slot").on("change", function () {
+            if ($(this).val() === "niestandardowy") {
+                $('#myModal').modal('show');
+            }
+            });
+       });
+
+
     </script>
 
 </head>
@@ -146,9 +167,9 @@
         <nav id="menu-desktop">
             <ul class="menu-desktop__list">
                 <li><a href="index.html" class="main-page"><i class="icon-home"></i>Strona główna</a></li>
-                <li><a href="#" class="add-incoming"><i class="icon-dollar"></i>Dodaj przychód</a></li>
-                <li><a href="dodaj_wydatek.html" class="add-expense"><i class="icon-basket"></i>Dodaj wydatek</a></li>
-                <li><a href="przegladaj_bilans.html" class="review-balance"><i class="icon-calc"></i>Przeglądaj bilans</a></li>
+                <li><a href="dodaj_przychod.php" class="add-incoming"><i class="icon-dollar"></i>Dodaj przychód</a></li>
+                <li><a href="dodaj_wydatek.php" class="add-expense"><i class="icon-basket"></i>Dodaj wydatek</a></li>
+                <li><a href="przegladaj_bilans.php" class="review-balance"><i class="icon-calc"></i>Przeglądaj bilans</a></li>
                 <li><a href="#" class="settings"><i class="icon-cog"></i>Ustawienia</a></li>
                 <li><a href="wyloguj.php" class="log-out"><i class="icon-logout"></i>Wyloguj się</a></li>
             </ul>
@@ -160,9 +181,9 @@
             </button>
             <ul class="menu-mobile__list hidden">
                 <li><a href="index.html" class="main-page"><i class="icon-home"></i>Strona główna</a></li>
-                <li><a href="#" class="add-incoming"><i class="icon-dollar"></i>Dodaj przychód</a></li>
-                <li><a href="dodaj_wydatek.html" class="add-expense"><i class="icon-basket"></i>Dodaj wydatek</a></li>
-                <li><a href="przegladaj_bilans.html" class="review-balance"><i class="icon-calc"></i>Przeglądaj bilans</a></li>
+                <li><a href="dodaj_przychod.php" class="add-incoming"><i class="icon-dollar"></i>Dodaj przychód</a></li>
+                <li><a href="dodaj_wydatek.php" class="add-expense"><i class="icon-basket"></i>Dodaj wydatek</a></li>
+                <li><a href="przegladaj_bilans.php" class="review-balance"><i class="icon-calc"></i>Przeglądaj bilans</a></li>
                 <li><a href="#" class="settings"><i class="icon-cog"></i>Ustawienia</a></li>
                 <li><a href="wyloguj.php" class="log-out"><i class="icon-logout"></i>Wyloguj się</a></li>
             </ul>
@@ -181,15 +202,32 @@
                                         <option>bieżący miesiąc</option>
                                         <option>poprzedni miesiąc</option>
                                         <option>bieżący rok</option>
-                                        <option id="non-standard">niestandardowy</option>
+                                        <option value="niestandardowy">niestandardowy</option>
                                     </select>
                                 </label>
                             </div>
-                            <div class="differnet-term">
-                                <label for="range">Podaj interesujący Cię zakres dat:
-                                    <input type="text" id="range">
-                                </label>
-                                <input type="button" value="Wybierz okres">
+
+                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                <div class="modal-body">
+                                    Zakres od:
+                                    <div class="input-group">
+                                        <span class="icon-container"><i class="icon-calendar"></i></span>
+                                        <input type="text" name="date" class="datepicker form-control" placeholder="Data">
+                                    </div>
+                                    do: 
+                                    <div class="input-group">
+                                        <span class="icon-container"><i class="icon-calendar"></i></span>
+                                        <input type="text" name="date" class="datepicker form-control" placeholder="Data">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-success">Save changes</button>
+                                </div>
+                                </div>
+                            </div>
                             </div>
                         </div>
                     </form>
