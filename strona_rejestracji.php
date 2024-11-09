@@ -59,16 +59,30 @@ if (isset($_POST['e-mail'])) {
     if ($connection->connect_errno != 0) {
         throw new Exception(mysqli_connect_errno());
     } else {
-        $score = $connection->query("SELECT id FROM users WHERE email = '$email'");
-        if (!$score) {
+        $score_mails = $connection->query("SELECT id FROM users WHERE email = '$email'");
+        if (!$score_mails) {
             throw new Exception($connection->error);
         }
 
-        $how_many_mails = $score->num_rows;
+        $how_many_mails = $score_mails->num_rows;
         if ($how_many_mails > 0) {
             $all_OK = false;
             $_SESSION['error_mail'] = "Istnieje już konto o podanym adresie e-mail.";
         }
+
+        $result_id_expense = $connection->query("SELECT MAX(id) AS max_id FROM incomes_category_assigned_to_users");
+        if (!$result_id_expense) {
+            throw new Exception($connection->error);
+        }
+
+        $row = $result_id_expense->fetch_assoc();
+        $max_id = $row['max_id'];
+        
+        if ($max_id !== null) {
+            $next_id = $max_id + 1;
+            $connection->query("ALTER TABLE incomes_category_assigned_to_users AUTO_INCREMENT = $next_id");
+        }
+
 
         if ($all_OK == true) {
             if ($connection->query("INSERT INTO users VALUES(NULL, '$username', '$password_hash', '$email')")) {
@@ -76,10 +90,10 @@ if (isset($_POST['e-mail'])) {
 
                 if ($user_id) {
 
-                    $insert_categories_query = "INSERT INTO expenses_category_assigned_to_users (user_id, name) 
+                    $insert_categories_expense_query = "INSERT INTO expenses_category_assigned_to_users (user_id, name) 
                                                  SELECT '$user_id', name FROM expenses_category_default";
 
-                    if (!$connection->query($insert_categories_query)) {
+                    if (!$connection->query($insert_categories_expense_query)) {
                         throw new Exception("Błąd podczas dodawania kategorii wydatków: " . $connection->error);
                     }
 
@@ -89,6 +103,14 @@ if (isset($_POST['e-mail'])) {
                     if (!$connection->query($insert_payment_query)) {
                         throw new Exception("Błąd podczas dodawania metody płatności: " . $connection->error);
                     }
+
+                    $insert_categories_income_query = "INSERT INTO incomes_category_assigned_to_users (user_id, name)
+                                                SELECT '$user_id', name FROM incomes_category_default";
+
+                    if (!$connection->query($insert_categories_income_query)) {
+                      throw new Exception("Błąd podczas dodawania kategorii przychodów: " . $connection->error);
+                    }
+
                 } else {
                     throw new Exception("Błąd: Użytkownik nie został dodany.");
                   }
@@ -230,7 +252,7 @@ if (isset($_POST['e-mail'])) {
               ?>
         </div>
 
-        <div class="g-recaptcha" data-sitekey="6LeWdloqAAAAAHZHEw0P1JfZ_wvMLXIvrjh0ZaaP"></div>
+        <div class="g-recaptcha" data-sitekey="6LeWdloqAAAAAHZHEw0P1JfZ_wvMLXIvrjh0ZaaP" style = "margin-top: 16px"></div>
 		
           <?php
           
