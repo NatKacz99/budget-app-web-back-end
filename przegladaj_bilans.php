@@ -7,6 +7,73 @@
 		header('Location: strona_logowania.php');
 		exit();
 	}
+
+    require_once "connect.php";
+
+    try {
+        $pdo = new PDO("mysql:host=$host;dbname=$db_name", $db_user, $db_password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $all_OK = true;
+
+        if($all_OK == true){
+            $user_id = $_SESSION['user_id'];
+            $results = [];
+
+            if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['time-slot'])) {
+                
+            $selected_period = $_POST['time-slot'];
+
+            $start_day = "";
+            $end_day = "";
+
+            switch($selected_period){
+                case 'bieżący_miesiąc':
+                    $start_day = date('Y-m-01');
+                    $end_day = date('Y-m-d');
+
+                break;
+                case 'poprzedni_miesiąc':
+                    $start_day = date('Y-m-01', strtotime('-1 month'));
+                    $end_day = date('Y-m-t', strtotime('-1 month'));
+
+                break;
+                case 'bieżący_rok':
+                    $start_day = date('Y-01-01');
+                    $end_day = date('Y-m-d');
+
+                break;
+                case 'niestandardowy':
+                    if (isset($_POST['start_day']) && isset($_POST['end_day'])) {
+                        $start_day = $_POST['start_day'];
+                        $end_day = $_POST['end_day'];
+                    };
+
+                break;
+                default:
+                    echo "Brak odpowiedniego okresu czasu.";
+                    break;
+            }
+
+            $stmt = $pdo->prepare("SELECT name AS kategoria, SUM(amount) AS kwota FROM expenses
+                                JOIN expenses_category_assigned_to_users ON expenses_category_assigned_to_users.id = expenses.expense_category_assigned_to_user_id
+                                WHERE expenses.user_id = :user_id 
+                                AND date_of_expense BETWEEN :start_day AND :end_day
+                                GROUP BY expense_category_assigned_to_user_id
+                                ORDER BY kwota DESC");
+
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->bindParam(':start_day', $start_day);
+            $stmt->bindParam(':end_day', $end_day);
+
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+    }
+    }   catch(PDOException $error) {
+        echo '<span style="color: red">Błąd serwera! Przepraszamy za niedogodności i zapraszamy do wizyty w innym terminie!</span>';
+      }
+    
 	
 ?>
 
@@ -149,13 +216,13 @@
             });
         });
 
-        $(document).ready(function () {
-        $("#time-slot").on("change", function () {
-            if ($(this).val() === "niestandardowy") {
+        function handleTimeSlotChange(select) {
+            if (select.value !== "niestandardowy") {
+                select.form.submit();
+            } else {
                 $('#myModal').modal('show');
             }
-            });
-       });
+        }
 
 
     </script>
@@ -194,14 +261,15 @@
         <div class="container-outside">
             <div class="container-inside">
                 <section>
-                    <form id="form_balance">
+                    <form id="form_balance" method="post">
                         <div class="check-period">
                             <div>
-                                <label for="time-slot">Wybierz przedział czasowy:
-                                    <select id="time-slot">
-                                        <option>bieżący miesiąc</option>
-                                        <option>poprzedni miesiąc</option>
-                                        <option>bieżący rok</option>
+                                <label for="time-slot">
+                                    <select id="time-slot" name="time-slot" onchange="handleTimeSlotChange(this)">
+                                        <option selected disabled>Wybierz okres czasu</option>
+                                        <option value="bieżący_miesiąc">bieżący miesiąc</option>
+                                        <option value="poprzedni_miesiąc">poprzedni miesiąc</option>
+                                        <option value="bieżący_rok">bieżący rok</option>
                                         <option value="niestandardowy">niestandardowy</option>
                                     </select>
                                 </label>
@@ -212,19 +280,19 @@
                                 <div class="modal-content">
                                 <div class="modal-body">
                                     Zakres od:
-                                    <div class="input-group">
-                                        <span class="icon-container"><i class="icon-calendar"></i></span>
-                                        <input type="text" name="date" class="datepicker form-control" placeholder="Data">
-                                    </div>
+                                        <div class="input-group">
+                                            <span class="icon-container"><i class="icon-calendar"></i></span>
+                                            <input type="text" name="start_day" class="datepicker form-control" placeholder="Data początkowa">
+                                        </div>
                                     do: 
-                                    <div class="input-group">
-                                        <span class="icon-container"><i class="icon-calendar"></i></span>
-                                        <input type="text" name="date" class="datepicker form-control" placeholder="Data">
-                                    </div>
+                                        <div class="input-group">
+                                            <span class="icon-container"><i class="icon-calendar"></i></span>
+                                                <input type="text" name="end_day" class="datepicker form-control" placeholder="Data końcowa">
+                                         </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-success">Save changes</button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Zamknij</button>
+                                    <button type="submit" class="btn btn-success">Zapisz zmiany</button>
                                 </div>
                                 </div>
                             </div>
@@ -268,26 +336,19 @@
                                     <thead>
                                         <tr>
                                             <th class="header-category">Kategoria</th>
-                                            <th class="header-amount">Kwota</th>
+                                            <th class="header-amount">Kwota (zł)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td class="category">jedzenie</td>
-                                            <td>500</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="category">rozrywka</td>
-                                            <td>200</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="category">transport</td>
-                                            <td>400</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="sum">Suma</td>
-                                            <td>1100</td>
-                                        </tr>
+                                        <?php 
+                                            if (empty($results)) {
+                                                echo "<tr><td colspan='2'>Brak wyników</td></tr>";
+                                            } else {
+                                                foreach ($results as $row) {
+                                                    echo "<tr><td>{$row['kategoria']}</td><td>{$row['kwota']}</td></tr>";
+                                                }
+                                            }
+                                        ?>
                                     </tbody>
                                 </table>
                             </div>
