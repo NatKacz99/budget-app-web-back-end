@@ -68,6 +68,9 @@
 
             $stmt->execute();
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $how_many_categories = $stmt->rowCount();
+
         }
     }
     }   catch(PDOException $error) {
@@ -344,8 +347,14 @@
                                             if (empty($results)) {
                                                 echo "<tr><td colspan='2'>Brak wyników</td></tr>";
                                             } else {
+                                                $total_sum = 0;
                                                 foreach ($results as $row) {
                                                     echo "<tr><td>{$row['kategoria']}</td><td>{$row['kwota']}</td></tr>";
+                                                    $total_sum += $row['kwota'];
+                                                }
+                                                
+                                                if($how_many_categories > 1){
+                                                    echo "<tr><td><b>Suma całkowita<b/></td><td>{$total_sum}</td></tr>";
                                                 }
                                             }
                                         ?>

@@ -84,10 +84,6 @@ form {
     line-height: 30px
 }
 
-.sum {
-    font-weight: 700;
-}
-
 .balance {
     display: flex;
     flex-direction: column;
