@@ -55,26 +55,43 @@
                     break;
             }
 
-            $stmt = $pdo->prepare("SELECT name AS kategoria, SUM(amount) AS kwota FROM expenses
+            $stmt = $pdo->prepare("SELECT name AS kategoria_wydatku, SUM(amount) AS kwota_wydatku FROM expenses
                                 JOIN expenses_category_assigned_to_users ON expenses_category_assigned_to_users.id = expenses.expense_category_assigned_to_user_id
                                 WHERE expenses.user_id = :user_id 
                                 AND date_of_expense BETWEEN :start_day AND :end_day
                                 GROUP BY expense_category_assigned_to_user_id
-                                ORDER BY kwota DESC");
+                                ORDER BY kwota_wydatku DESC");
 
             $stmt->bindParam(':user_id', $user_id);
             $stmt->bindParam(':start_day', $start_day);
             $stmt->bindParam(':end_day', $end_day);
 
             $stmt->execute();
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $results_expenses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            $how_many_categories = $stmt->rowCount();
+            $how_many_categories_expenses = $stmt->rowCount();
+
+            $stmt = $pdo->prepare("SELECT name AS kategoria_przychodu, SUM(amount) AS kwota_przychodu FROM incomes
+                                JOIN incomes_category_assigned_to_users ON incomes_category_assigned_to_users.id = incomes.income_category_assigned_to_user_id
+                                WHERE incomes.user_id = :user_id 
+                                AND date_of_income BETWEEN :start_day AND :end_day
+                                GROUP BY income_category_assigned_to_user_id
+                                ORDER BY kwota_przychodu DESC");
+
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->bindParam(':start_day', $start_day);
+            $stmt->bindParam(':end_day', $end_day);
+
+            $stmt->execute();
+            $results_incomes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $how_many_categories_incomes = $stmt->rowCount();
 
         }
     }
     }   catch(PDOException $error) {
         echo '<span style="color: red">Błąd serwera! Przepraszamy za niedogodności i zapraszamy do wizyty w innym terminie!</span>';
+        echo $error->getMessage();
       }
     
 	
@@ -313,22 +330,25 @@
                                     <thead>
                                         <tr>
                                             <th class="header-category">Kategoria</th>
-                                            <th class="header-amount">Kwota</th>
+                                            <th class="header-amount">Kwota (zł)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td class="category">wynagrodzenie</td>
-                                            <td>6000</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="category">sprzedaż na allegro</td>
-                                            <td>100</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="sum">Suma</td>
-                                            <td>6100</td>
-                                        </tr>
+                                        <?php 
+                                            if (empty($results_incomes)) {
+                                                echo "<tr><td colspan='2'>Brak wyników</td></tr>";
+                                            } else {
+                                                $total_sum = 0;
+                                                foreach ($results_incomes as $row) {
+                                                    echo "<tr><td>{$row['kategoria_przychodu']}</td><td>{$row['kwota_przychodu']}</td></tr>";
+                                                    $total_sum += $row['kwota_przychodu'];
+                                                }
+                                                
+                                                if($how_many_categories_incomes > 1){
+                                                    echo "<tr><td><b>Suma całkowita<b/></td><td>{$total_sum}</td></tr>";
+                                                }
+                                            }
+                                        ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -344,16 +364,16 @@
                                     </thead>
                                     <tbody>
                                         <?php 
-                                            if (empty($results)) {
+                                            if (empty($results_expenses)) {
                                                 echo "<tr><td colspan='2'>Brak wyników</td></tr>";
                                             } else {
                                                 $total_sum = 0;
-                                                foreach ($results as $row) {
-                                                    echo "<tr><td>{$row['kategoria']}</td><td>{$row['kwota']}</td></tr>";
-                                                    $total_sum += $row['kwota'];
+                                                foreach ($results_expenses as $row) {
+                                                    echo "<tr><td>{$row['kategoria_wydatku']}</td><td>{$row['kwota_wydatku']}</td></tr>";
+                                                    $total_sum += $row['kwota_wydatku'];
                                                 }
                                                 
-                                                if($how_many_categories > 1){
+                                                if($how_many_categories_expenses > 1){
                                                     echo "<tr><td><b>Suma całkowita<b/></td><td>{$total_sum}</td></tr>";
                                                 }
                                             }
