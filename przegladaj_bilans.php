@@ -15,6 +15,7 @@
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $all_OK = true;
+        $selected_period = isset($_POST['time-slot']) ? $_POST['time-slot'] : '';
 
         if($all_OK == true){
             $user_id = $_SESSION['user_id'];
@@ -206,19 +207,6 @@
     `;
         }
 
-        document.addEventListener("DOMContentLoaded", function () {
-            showStatementAboutBilanceScore()
-        });
-
-        function showStatementAboutBilanceScore() {
-            let amountBalance = 5000;
-            if (amountBalance > 0) {
-                alert("Gratulacje. Świetnie zarządzasz finansami!");
-            }
-            else if (bilans < 0) {
-                alert("Uważaj, wpadasz w długi!");
-            }
-        }
 
         $(function () {
             $(".datepicker").datepicker({
@@ -287,10 +275,10 @@
                                 <label for="time-slot">
                                     <select id="time-slot" name="time-slot" onchange="handleTimeSlotChange(this)">
                                         <option selected disabled>Wybierz okres czasu</option>
-                                        <option value="bieżący_miesiąc">bieżący miesiąc</option>
-                                        <option value="poprzedni_miesiąc">poprzedni miesiąc</option>
-                                        <option value="bieżący_rok">bieżący rok</option>
-                                        <option value="niestandardowy">niestandardowy</option>
+                                        <option value="bieżący_miesiąc" <?php echo $selected_period === 'bieżący_miesiąc' ? 'selected' : ''; ?>>bieżący miesiąc</option>
+                                        <option value="poprzedni_miesiąc" <?php echo $selected_period === 'poprzedni_miesiąc' ? 'selected' : ''; ?>>poprzedni miesiąc</option>
+                                        <option value="bieżący_rok" <?php echo $selected_period === 'bieżący_rok' ? 'selected' : ''; ?>>bieżący rok</option>
+                                        <option value="niestandardowy" <?php echo $selected_period === 'niestandandardowy' ? 'selected' : ''; ?>>niestandardowy</option>
                                     </select>
                                 </label>
                             </div>
@@ -337,15 +325,16 @@
                                         <?php 
                                             if (empty($results_incomes)) {
                                                 echo "<tr><td colspan='2'>Brak wyników</td></tr>";
+                                                $total_sum_incomes = 0;
                                             } else {
-                                                $total_sum = 0;
+                                                $total_sum_incomes = 0;
                                                 foreach ($results_incomes as $row) {
                                                     echo "<tr><td>{$row['kategoria_przychodu']}</td><td>{$row['kwota_przychodu']}</td></tr>";
-                                                    $total_sum += $row['kwota_przychodu'];
+                                                    $total_sum_incomes += $row['kwota_przychodu'];
                                                 }
                                                 
                                                 if($how_many_categories_incomes > 1){
-                                                    echo "<tr><td><b>Suma całkowita<b/></td><td>{$total_sum}</td></tr>";
+                                                    echo "<tr><td><b>Suma całkowita<b/></td><td>{$total_sum_incomes}</td></tr>";
                                                 }
                                             }
                                         ?>
@@ -366,15 +355,16 @@
                                         <?php 
                                             if (empty($results_expenses)) {
                                                 echo "<tr><td colspan='2'>Brak wyników</td></tr>";
+                                                $total_sum_expenses = 0;
                                             } else {
-                                                $total_sum = 0;
+                                                $total_sum_expenses = 0;
                                                 foreach ($results_expenses as $row) {
                                                     echo "<tr><td>{$row['kategoria_wydatku']}</td><td>{$row['kwota_wydatku']}</td></tr>";
-                                                    $total_sum += $row['kwota_wydatku'];
+                                                    $total_sum_expenses += $row['kwota_wydatku'];
                                                 }
                                                 
                                                 if($how_many_categories_expenses > 1){
-                                                    echo "<tr><td><b>Suma całkowita<b/></td><td>{$total_sum}</td></tr>";
+                                                    echo "<tr><td><b>Suma całkowita<b/></td><td>{$total_sum_expenses}</td></tr>";
                                                 }
                                             }
                                         ?>
@@ -397,10 +387,19 @@
                             </div>
                         </div>
 
-                        <div>
+                        <div id="calculation">
+                                <?php
+                                    $balance_sheet = $total_sum_incomes - $total_sum_expenses." zł";
+                                ?>
+                        <span>
                             <h3>Bilans</h3>
-                            <span>
-                                <h3>5000</h3>
+                                <?php if ($balance_sheet < 0) { ?>
+                                    <h3 style = "color: red"><?php echo $balance_sheet; ?></h3> 
+                                    <div id="balance-negative-message"><?php echo "Uważaj, wpadasz w długi!"; ?></div>
+                                <?php } else if ($balance_sheet > 0) { ?>
+                                    <h3 style = "color: green"><?php echo $balance_sheet; ?></h3> 
+                                    <div id="balance-positive-message"><?php echo "Gratulacje. Świetnie zarządzasz finansami!"; ?></div>
+                                <?php } ?>
                             </span>
                         </div>
 

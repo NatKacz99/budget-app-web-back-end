@@ -112,7 +112,7 @@
         <nav id="menu-desktop">
             <ul class="menu-desktop__list">
                 <li><a href="index.html" class="main-page"><i class="icon-home"></i>Strona główna</a></li>
-                <li><a href="#" class="add-incoming"><i class="icon-dollar"></i>Dodaj przychód</a></li>
+                <li><a href="dodaj_przychod.php" class="add-incoming"><i class="icon-dollar"></i>Dodaj przychód</a></li>
                 <li><a href="dodaj_wydatek.php" class="add-expense"><i class="icon-basket"></i>Dodaj wydatek</a></li>
                 <li><a href="przegladaj_bilans.php" class="review-balance"><i class="icon-calc"></i>Przeglądaj bilans</a></li>
                 <li><a href="#" class="settings"><i class="icon-cog"></i>Ustawienia</a></li>
