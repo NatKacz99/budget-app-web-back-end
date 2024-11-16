@@ -1,8 +1,14 @@
+*{
+  box-sizing: border-box;
+}
+
 body{
   background-color: rgb(76, 141, 141);
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-sizing: border-box;
+  height: 100vh
 }
 
 #container-menu{
@@ -11,14 +17,28 @@ body{
   -moz-box-shadow: 0px 3px 10px 11px rgb(49, 115, 122);
   box-shadow: 0px 3px 10px 11px rgb(49, 115, 122);
   border-radius: 15px;
-  width: 30%;
+  width: 30% !important;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 20px;
   position: relative;
-  height: 600px
+  height: auto;
 }
+
+.nav-item{
+  background-color: rgba(155, 224, 224, 0.5); opacity: 75%;
+  border-radius: 20px;
+  text-align: center;
+  padding: 15px;
+  min-width: 190px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 10px;
+  position: relative;
+}
+
 
 h1, p{
   text-align: center;
@@ -36,3 +56,47 @@ a{
 p{
   color: rgb(93, 93, 95)
 }
+
+@media (max-width: 768px) {
+  #container-menu {
+      height: auto !important;
+      padding: 10px;
+      overflow: hidden;
+      max-width: 100%; 
+      background-size: cover;
+      margin-bottom: 20px
+  }
+
+  .nav-item {
+      width: 100%; 
+      margin-bottom: 5px; 
+      padding: 10px; 
+      border-radius: 20px
+  }
+
+  h1 {
+      font-size: 1.5rem; 
+  }
+}
+
+@media(max-width: 575px) {
+  #container-menu {
+    height: auto !important;
+    padding: 10px;
+    overflow: hidden;
+    max-width: 100%; 
+    background-size: cover
+  }
+
+  .nav-item {
+      width: 100% !important;
+      margin-bottom: 5px; 
+      padding: 10px; 
+      border-radius: 20px !important;
+  }
+
+  h1 {
+      font-size: 1.25rem; 
+  }
+}
+
