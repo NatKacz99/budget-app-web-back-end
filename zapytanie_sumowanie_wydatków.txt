@@ -1,6 +1,0 @@
-SELECT
-	SUM(wydatki.rodzaj_wydatku) AS suma_wydatków
-FROM 
-	wydatki
-NATURAL JOIN id_użytkownika
-GROUP BY bilans.przedział_czasowy
