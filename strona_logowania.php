@@ -1,3 +1,21 @@
+<?php
+
+  session_start();
+
+  if((isset($_SESSION['logged'])) && ($_SESSION['logged'] == true))
+	{
+    if(isset($_SESSION['username'])){
+      header('Location: menu_glowne.php');
+      exit();
+    }
+
+		header('Location: menu_glowne.php');
+		exit();
+	}
+
+?>
+
+
 <!DOCTYPE html>
 
 <html lang="pl">
@@ -28,7 +46,7 @@
             <i class="icon-mail-alt"></i>
           </span>
           <div class="form-floating">
-            <input type="email" name="e-mail" class="form-control mb-1" id="floatingInput" placeholder="name@example.com">
+            <input type="text" name="e-mail" class="form-control mb-1" id="floatingInput" placeholder="E-mail">
             <label for="floatingInput">Adres e-mail</label>
           </div>
         </div>
@@ -52,6 +70,16 @@
       <button class="btn btn-primary w-100 py-2" type="submit">Zaloguj</button>
       </div>
     </form>
+    
+    <?php
+	
+    if (isset($_SESSION['error_log_in'])) {
+      echo $_SESSION['error_log_in'];
+      unset($_SESSION['error_log_in']); 
+    }
+
+   ?>
+
   </main>
 
 </body>

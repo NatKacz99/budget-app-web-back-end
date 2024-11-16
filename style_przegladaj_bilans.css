@@ -20,10 +20,10 @@ body {
 
 .menu-desktop__list {
     display: flex;
-    justify-content: space-between;
-    margin: 0;
-    padding-left: 20px;
-    padding-right: 20px;
+    justify-content: space-between !important;
+    margin: 0 !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
 }
 
 li {
@@ -33,8 +33,8 @@ li {
 
 #menu-desktop {
     background-color: rgb(174, 202, 193);
-    padding: 20px;
-    margin-bottom: 20px
+    padding: 20px !important;
+    margin-bottom: 20px 
 }
 
 #menu-mobile {
@@ -84,10 +84,6 @@ form {
     line-height: 30px
 }
 
-.sum {
-    font-weight: 700;
-}
-
 .balance {
     display: flex;
     flex-direction: column;
@@ -107,21 +103,25 @@ table {
     gap: 90px;
     margin-bottom: 60px;
     align-items: flex-start;
+    background-color: rgba(155, 224, 224, 0.5);
+    border-radius: 15px;
+    padding: 10px
 }
 
 h3 {
     text-align: center;
+    margin-top: 2px
 }
 
-span {
-    color: rgb(200, 20, 20)
-}
 
 .charts {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-around;
+    background-color: rgba(155, 224, 224, 0.5);
+    border-radius: 15px;
+    padding: 10px
 }
 
 .header-category {
@@ -166,18 +166,47 @@ input[value="Wybierz okres"]:hover {
     background-color: rgb(37, 98, 24);
 }
 
+.btn-custom-close {
+    background-color: #ff6347; 
+    color: #fff;
+    border-color: #ff6347;
+}
+
+.btn-custom-save {
+    background-color: #32cd32; 
+    color: #fff;
+    border-color: #32cd32;
+}
+
+#balance-positive-message{
+    color: green !important;
+    margin-bottom: 2px
+}
+
+#balance-negative-message{
+    color: red !important;
+    margin-bottom: 2px
+}
+
+#calculation{
+    background-color: rgba(155, 224, 224, 0.5);
+    border-radius: 15px;
+    padding: 10px;
+    margin-bottom: 5px;
+}
+
 @media(max-width: 768px) {
     #menu-desktop {
         display: none;
-    }
-
-    #menu-mobile {
+      }
+    
+      #menu-mobile {
         display: flex;
         flex-direction: column;
         align-items: flex-end;
-    }
-
-    .menu-mobile__list {
+      }
+    
+      .menu-mobile__list {
         position: absolute;
         top: 40px;
         list-style-type: none;
@@ -189,30 +218,30 @@ input[value="Wybierz okres"]:hover {
         max-height: 230px;
         overflow: hidden;
         transition: max-height 0.5s ease-in-out;
-    }
-
-    .menu-mobile__list>li>a {
+      }
+    
+      .menu-mobile__list>li>a {
         display: block;
         color: #000;
         padding: 8px 16px;
         text-decoration: none;
         text-align: center;
-    }
-
-    .menu-mobile__list>li>a:hover {
+      }
+    
+      .menu-mobile__list>li>a:hover {
         background-color: #555;
         color: white;
-    }
-
-    .menu-mobile__collapsible {
+      }
+    
+      .menu-mobile__collapsible {
         cursor: pointer;
-    }
-
-    .hidden {
+      }
+    
+      .hidden {
         max-height: 0;
         overflow: hidden;
         transition: max-height 0.5s ease-out;
-    }
+      }
 
     .check-period {
         margin-top: 50px;
@@ -222,6 +251,9 @@ input[value="Wybierz okres"]:hover {
     .tables-incomings-expenses {
         display: flex;
         flex-direction: column;
+        background-color: rgba(155, 224, 224, 0.5);
+        border-radius: 15px;
+        padding: 10px
     }
 
     .differnet-term {
@@ -234,6 +266,9 @@ input[value="Wybierz okres"]:hover {
 
     .charts {
         flex-direction: column;
+        background-color: rgba(155, 224, 224, 0.5);
+        border-radius: 15px;
+        padding: 10px
     }
 
     .pie-chart-expenses-container {
@@ -296,6 +331,9 @@ input[value="Wybierz okres"]:hover {
 
     .charts {
         position: relative;
+        background-color: rgba(155, 224, 224, 0.5);
+        border-radius: 15px;
+        padding: 10px
     }
 
     #pie-chart-incomings {
@@ -319,6 +357,9 @@ input[value="Wybierz okres"]:hover {
     .tables-incomings-expenses {
         flex-direction: column;
         align-items: center;
+        background-color: rgba(155, 224, 224, 0.5);
+        border-radius: 15px;
+        padding: 10px
     }
 
     input[value="Wybierz okres"] {
