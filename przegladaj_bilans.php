@@ -224,11 +224,33 @@
             });
         });
 
+        document.addEventListener("DOMContentLoaded", function () {
+            const timePeriodSelect = document.getElementById("time-slot");
+            const calculationDiv = document.getElementById("calculation");
+            const chartsContainer = document.getElementsByClassName("charts")[0];
+
+            if (!timePeriodSelect.value || timePeriodSelect.value === "Wybierz okres czasu") {
+                calculationDiv.style.display = "none";
+                chartsContainer.style.marginBottom = "30px";
+            }
+         });
+
         function handleTimeSlotChange(select) {
+            const timePeriodSelect = document.getElementById("time-slot");
+            const calculationDiv = document.getElementById("calculation");
+            const chartsContainer = document.getElementsByClassName("charts")[0];
+            
             if (select.value !== "niestandardowy") {
                 select.form.submit();
             } else {
                 $('#myModal').modal('show');
+            }
+
+            if (timePeriodSelect.value && timePeriodSelect.value !== "Wybierz okres czasu") {
+            calculationDiv.style.display = "block"; 
+            } else {
+                calculationDiv.style.display = "none"; 
+                chartsContainer.style.marginBottom = "30px";
             }
         }
 
@@ -278,7 +300,7 @@
                                         <option value="bieżący_miesiąc" <?php echo $selected_period === 'bieżący_miesiąc' ? 'selected' : ''; ?>>bieżący miesiąc</option>
                                         <option value="poprzedni_miesiąc" <?php echo $selected_period === 'poprzedni_miesiąc' ? 'selected' : ''; ?>>poprzedni miesiąc</option>
                                         <option value="bieżący_rok" <?php echo $selected_period === 'bieżący_rok' ? 'selected' : ''; ?>>bieżący rok</option>
-                                        <option value="niestandardowy" <?php echo $selected_period === 'niestandandardowy' ? 'selected' : ''; ?>>niestandardowy</option>
+                                        <option value="niestandardowy" <?php echo $selected_period === 'niestandardowy' ? 'selected' : ''; ?>>niestandardowy</option>
                                     </select>
                                 </label>
                             </div>
@@ -389,18 +411,19 @@
 
                         <div id="calculation">
                                 <?php
-                                    $balance_sheet = $total_sum_incomes - $total_sum_expenses." zł";
+                                    $balance = $total_sum_incomes - $total_sum_expenses;
+                                    $balance_sheet = $balance." zł";
                                 ?>
                         <span>
                             <h3>Bilans</h3>
-                                <?php if ($balance_sheet < 0) { ?>
+                                <?php if ($balance < 0) { ?>
                                     <h3 style = "color: red"><?php echo $balance_sheet; ?></h3> 
                                     <div id="balance-negative-message"><?php echo "Uważaj, wpadasz w długi!"; ?></div>
-                                <?php } else if ($balance_sheet > 0) { ?>
+                                <?php } else if ($balance > 0) { ?>
                                     <h3 style = "color: green"><?php echo $balance_sheet; ?></h3> 
                                     <div id="balance-positive-message"><?php echo "Gratulacje. Świetnie zarządzasz finansami!"; ?></div>
                                 <?php } ?>
-                            </span>
+                         </span>
                         </div>
 
                     </div>

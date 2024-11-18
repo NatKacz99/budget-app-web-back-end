@@ -20,17 +20,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Menu główne</title>
-
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     
-
   <link rel="stylesheet" href="style_menu_glowne.css">
   <link rel="stylesheet" href="./css/cap.css">
 </head>
 
 <body>
-
 <div class="text-center mt-3 mb-5">
   <div class="alert alert-success px-1 pt-2 pb-0 mt-0"> <p style = "color: rgb(93, 93, 95)">Hej <?php echo $_SESSION['username']; ?>! Zalogowałeś się na swoje konto.</p></div>
 </div>
@@ -58,5 +55,4 @@
     </a>
 </div>
 </nav>
-
 </body>

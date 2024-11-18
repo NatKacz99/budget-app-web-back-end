@@ -85,9 +85,9 @@ form {
 }
 
 .balance {
+    gap: 30px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
     align-items: center;
     margin: 0;
 }
@@ -101,7 +101,7 @@ table {
     display: flex;
     flex-direction: row;
     gap: 90px;
-    margin-bottom: 60px;
+    margin-bottom: 0px;
     align-items: flex-start;
     background-color: rgba(155, 224, 224, 0.5);
     border-radius: 15px;
@@ -192,7 +192,7 @@ input[value="Wybierz okres"]:hover {
     background-color: rgba(155, 224, 224, 0.5);
     border-radius: 15px;
     padding: 10px;
-    margin-bottom: 5px;
+    margin-bottom: 30px;
 }
 
 @media(max-width: 768px) {
@@ -286,7 +286,7 @@ input[value="Wybierz okres"]:hover {
     }
 }
 
-@media(max-width: 575px) {
+@media(width < 576px) {
     .container-outside {
         width: 100%;
         position: relative;
