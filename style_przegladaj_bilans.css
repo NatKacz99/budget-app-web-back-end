@@ -108,6 +108,10 @@ table {
     padding: 10px
 }
 
+td{
+    text-align: center;
+}
+
 h3 {
     text-align: center;
     margin-top: 2px
@@ -121,6 +125,13 @@ h3 {
     background-color: rgb(128, 37, 212);
 }
 
+.header-date{
+    background-color: #b4af29;
+}
+
+.header-comment{
+    background-color: #3137ab;
+}
 
 .legend-item {
     display: flex;
@@ -228,7 +239,7 @@ input[value="Wybierz okres"]:hover {
         flex-direction: column;
         background-color: rgba(155, 224, 224, 0.5);
         border-radius: 15px;
-        padding: 10px
+        padding: 10px;
     }
 
     .differnet-term {

@@ -59,7 +59,7 @@
                     break;
             }
 
-            $stmt = $pdo->prepare("SELECT name AS kategoria_wydatku, SUM(amount) AS kwota_wydatku FROM expenses
+            $stmt = $pdo->prepare("SELECT name AS kategoria_wydatku, SUM(amount) AS kwota_wydatku, date_of_expense, expense_comment    FROM expenses
                                 JOIN expenses_category_assigned_to_users ON expenses_category_assigned_to_users.id = expenses.expense_category_assigned_to_user_id
                                 WHERE expenses.user_id = :user_id 
                                 AND date_of_expense BETWEEN :start_day AND :end_day
@@ -76,7 +76,8 @@
             $how_many_categories_expenses = $stmt->rowCount();
 
 
-            $stmt = $pdo->prepare("SELECT name AS kategoria_przychodu, SUM(amount) AS kwota_przychodu FROM incomes
+            $stmt = $pdo->prepare("SELECT name AS kategoria_przychodu, SUM(amount) AS kwota_przychodu, 
+            date_of_income, income_comment FROM incomes
                                 JOIN incomes_category_assigned_to_users ON incomes_category_assigned_to_users.id = incomes.income_category_assigned_to_user_id
                                 WHERE incomes.user_id = :user_id 
                                 AND date_of_income BETWEEN :start_day AND :end_day
@@ -332,6 +333,8 @@
                                         <tr>
                                             <th class="header-category">Kategoria</th>
                                             <th class="header-amount">Kwota (zł)</th>
+                                            <th class="header-date">Data</th>
+                                            <th class="header-comment">Komentarz</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -342,12 +345,19 @@
                                             } else {
                                                 $total_sum_incomes = 0;
                                                 foreach ($results_incomes as $row) {
-                                                    echo "<tr><td>{$row['kategoria_przychodu']}</td><td>{$row['kwota_przychodu']}</td></tr>";
+                                                    echo "<tr>
+                                                        <td>{$row['kategoria_przychodu']}</td>
+                                                        <td>{$row['kwota_przychodu']}</td>
+                                                        <td>{$row['date_of_income']}</td>
+                                                        <td>";
+                                                        echo !empty($row['income_comment']) ? $row['income_comment'] : "Brak";
+                                                        echo "</td>
+                                                    </tr>";
                                                     $total_sum_incomes += $row['kwota_przychodu'];
                                                 }
                                                 
                                                 if($how_many_categories_incomes > 1){
-                                                    echo "<tr><td><b>Suma całkowita<b/></td><td>{$total_sum_incomes}</td></tr>";
+                                                    echo "<tr><td><b>Suma całkowita<b/></td><td colspan='3'>{$total_sum_incomes}</td></tr>";
                                                 }
                                             }
                                         ?>
@@ -362,6 +372,8 @@
                                         <tr>
                                             <th class="header-category">Kategoria</th>
                                             <th class="header-amount">Kwota (zł)</th>
+                                            <th class="header-date">Data</th>
+                                            <th class="header-comment">Komentarz</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -372,7 +384,15 @@
                                             } else {
                                                 $total_sum_expenses = 0;
                                                 foreach ($results_expenses as $row) {
-                                                    echo "<tr><td>{$row['kategoria_wydatku']}</td><td>{$row['kwota_wydatku']}</td></tr>";
+                                                    echo "<tr>
+                                                            <td>{$row['kategoria_wydatku']}</td>
+                                                            <td>{$row['kwota_wydatku']}</td>
+                                                            <td>{$row['date_of_expense']}</td>
+                                                            <td>";
+                                                            echo !empty($row['expense_comment']) ? $row['expense_comment'] : "Brak";
+                                                            echo "</td>
+                                                        
+                                                        </tr>";
                                                     $total_sum_expenses += $row['kwota_wydatku'];
                                                 }
                                                 
