@@ -325,7 +325,7 @@
 
                 <section>
                     <div class="balance">
-                        <div class="tables-incomings-expenses">
+                        <div class="tables-incomes-expenses">
                             <div>
                                 <h3>Przychody</h3>
                                 <table>
@@ -397,7 +397,7 @@
                                                 }
                                                 
                                                 if($how_many_categories_expenses > 1){
-                                                    echo "<tr><td><b>Suma całkowita<b/></td><td>{$total_sum_expenses}</td></tr>";
+                                                    echo "<tr><td><b>Suma całkowita<b/></td><td colspan='3'>{$total_sum_expenses}</td></tr>";
                                                 }
                                             }
                                         ?>
@@ -405,8 +405,8 @@
                                 </table>
                             </div>
                         </div>
-                            <div id="pie-chart-incomes-container" style="height: 300px; width: 100%;"></div>
-                            <div id="pie-chart-expenses-container" style="height: 300px; width: 100%;"></div>
+                            <div id="pie-chart-incomes-container" style="height: 300px; width: 60%;"></div>
+                            <div id="pie-chart-expenses-container" style="height: 300px; width: 60%;"></div>
 
                         <div id="calculation">
                                 <?php
