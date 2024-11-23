@@ -17,15 +17,21 @@
         $all_OK = true;
     
         if (isset($_POST['price'])) {
-            $price = $_POST['price'];
+            $price = str_replace(',','.',$_POST['price']);
     
-            if (!is_numeric($price)) {
+            if (!is_numeric($price) || empty($price)) {
                 $_SESSION['error_price'] = 'Podaj kwotę w formacie liczbowym.';
                 $all_OK = false;
             }
+
+            if (empty($_POST['category'])) {
+                $_SESSION['error_category'] = 'Wybierz kategorię przychodu.';
+                $all_OK = false;
+            } else {
+                $income_category = $_POST['category'];
+            }
     
             if ($all_OK) {
-                $income_category = $_POST['category'];
                 $date_income = $_POST['date'];
                 $user_id = $_SESSION['user_id']; 
                 $comment = $_POST['comment'];
@@ -137,6 +143,7 @@
                     <input type="text" name="price" class="form-control" placeholder="Kwota">
                 </div>
 
+        <div class="error" style = "color: red">
             <?php
                 
                 if (isset($_SESSION['error_price'])) {
@@ -145,6 +152,7 @@
                 }
 
             ?>
+        </div>
 
                 <div class="input-group">
                     <span class="icon-container"><i class="icon-calendar"></i></span>
@@ -162,6 +170,16 @@
                             <option>Inne</option>
                         </select>
                     </label>
+                    <div class="error" style = "color: red">
+                        <?php
+                            
+                            if (isset($_SESSION['error_category'])) {
+                                echo $_SESSION['error_category'];
+                                unset($_SESSION['error_category']); 
+                            }
+
+                        ?>
+                    </div>
                 </div>
 
                 <div class="input-group">

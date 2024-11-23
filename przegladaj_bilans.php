@@ -19,9 +19,12 @@
 
         if($all_OK == true){
             $user_id = $_SESSION['user_id'];
-            $results = [];
+
+            $results_expenses = [];
+            $results_incomes = [];
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['time-slot'])) {
+
                 
             $selected_period = $_POST['time-slot'];
 
@@ -72,6 +75,7 @@
 
             $how_many_categories_expenses = $stmt->rowCount();
 
+
             $stmt = $pdo->prepare("SELECT name AS kategoria_przychodu, SUM(amount) AS kwota_przychodu FROM incomes
                                 JOIN incomes_category_assigned_to_users ON incomes_category_assigned_to_users.id = incomes.income_category_assigned_to_user_id
                                 WHERE incomes.user_id = :user_id 
@@ -89,11 +93,45 @@
             $how_many_categories_incomes = $stmt->rowCount();
 
         }
+
+            $dataPointsIncomes = [];
+            $total_sum_incomes = 0;
+
+            foreach ($results_incomes as $row) {
+                $total_sum_incomes += $row['kwota_przychodu'];
+            }
+
+            foreach ($results_incomes as $row) {
+                if ($total_sum_incomes > 0) {
+                    $dataPointsIncomes[] = array(
+                        "label" => $row['kategoria_przychodu'],
+                        "y" => ($row['kwota_przychodu'] / $total_sum_incomes) * 100
+                    );
+                }
+            }
+
+            $dataPointsExpenses = [];
+            $total_sum_expenses = 0;
+
+            foreach ($results_expenses as $row) {
+                $total_sum_expenses += $row['kwota_wydatku'];
+            }
+
+            foreach ($results_expenses as $row) {
+                if ($total_sum_expenses > 0) {
+                    $dataPointsExpenses[] = array(
+                        "label" => $row['kategoria_wydatku'],
+                        "y" => ($row['kwota_wydatku'] / $total_sum_expenses) * 100
+                    );
+                }
+            }
+
     }
     }   catch(PDOException $error) {
         echo '<span style="color: red">Błąd serwera! Przepraszamy za niedogodności i zapraszamy do wizyty w innym terminie!</span>';
         echo $error->getMessage();
       }
+
     
 	
 ?>
@@ -121,90 +159,43 @@
 
     <script>
 
-        document.addEventListener("DOMContentLoaded", function () {
-            showPieChartIncomings();
-            showPieChartExpenses();
+        window.onload = function() {
+        
+        var chartIncomes = new CanvasJS.Chart("pie-chart-incomes-container", {
+            animationEnabled: true,
+            backgroundColor: "rgba(155, 224, 224, 0.5)",
+
+            title: {
+                text: "Przychody"
+            },
+
+            data: [{
+                type: "pie",
+                yValueFormatString: "#,##0.00\"%\"",
+                indexLabel: "{label} ({y})",
+                dataPoints: <?php echo json_encode($dataPointsIncomes, JSON_NUMERIC_CHECK); ?>
+            }]
         });
+        chartIncomes.render();
+ 
+ 
+        var chartExpenses = new CanvasJS.Chart("pie-chart-expenses-container", {
+            animationEnabled: true,
+            backgroundColor: "rgba(155, 224, 224, 0.5)",
 
-        function showPieChartIncomings() {
-            let sectionA = { size: 6000, color: "pink" };
-            let sectionB = { size: 100, color: "yellow" };
+            title: {
+                text: "Wydatki"
+            },
 
-            const values = [sectionA.size, sectionB.size];
-            const total = values.reduce((acc, val) => acc + val, 0);
-
-            let startAngle = 0;
-            const canvas = document.getElementById("pie-chart-incomings");
-            const ctx = canvas.getContext("2d");
-
-            values.forEach((value, index) => {
-                const angle = (value / total) * Math.PI * 2;
-
-                ctx.beginPath();
-                ctx.moveTo(canvas.width / 2, canvas.height / 2);
-                ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2, startAngle, startAngle + angle);
-                ctx.closePath();
-
-                ctx.fillStyle = index === 0 ? sectionA.color : sectionB.color;
-                ctx.fill();
-
-                startAngle += angle;
-            });
-
-            const legend = document.getElementById("pie-chart-legend__incomings");
-            legend.innerHTML = `
-        <div class="legend-item">
-            <div class="legend-color" style="background-color:${sectionA.color}"></div>
-            <div class="legend-label">wynagrodzenie: ${((sectionA.size / total) * 100).toFixed(2)} %</div>
-        </div> 
-        <div class="legend-item">
-            <div class="legend-color" style="background-color:${sectionB.color}"></div>
-            <div class="legend-label">sprzedaż na allegro: ${((sectionB.size / total) * 100).toFixed(2)} %</div>
-        </div> 
-    `;
-        }
-
-        function showPieChartExpenses() {
-            let sectionA = { size: 500, color: "violet" };
-            let sectionB = { size: 200, color: "gray" };
-            let sectionC = { size: 400, color: "orange" };
-
-            const values = [sectionA.size, sectionB.size, sectionC.size];
-            const total = values.reduce((acc, val) => acc + val, 0);
-
-            let startAngle = 0;
-            const canvas = document.getElementById("pie-chart-expenses");
-            const ctx = canvas.getContext("2d");
-
-            values.forEach((value, index) => {
-                const angle = (value / total) * Math.PI * 2;
-
-                ctx.beginPath();
-                ctx.moveTo(canvas.width / 2, canvas.height / 2);
-                ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2, startAngle, startAngle + angle);
-                ctx.closePath();
-
-                ctx.fillStyle = index === 0 ? sectionA.color : index === 1 ? sectionB.color : sectionC.color;
-                ctx.fill();
-
-                startAngle += angle;
-            });
-
-            const legend = document.getElementById("pie-chart-legend__expenses");
-            legend.innerHTML = `
-        <div class="legend-item">
-            <div class="legend-color" style="background-color:${sectionA.color}"></div>
-            <div class="legend-label">jedzenie: ${((sectionA.size / total) * 100).toFixed(2)} %</div>
-        </div> 
-        <div class="legend-item">
-            <div class="legend-color" style="background-color:${sectionB.color}"></div>
-            <div class="legend-label">rozrywka: ${((sectionB.size / total) * 100).toFixed(2)} %</div>
-        </div>
-        <div class="legend-item">
-            <div class="legend-color" style="background-color:${sectionC.color}"></div>
-            <div class="legend-label">transport: ${((sectionC.size / total) * 100).toFixed(2)} %</div>
-        </div>
-    `;
+            data: [{
+                type: "pie",
+                yValueFormatString: "#,##0.00\"%\"",
+                indexLabel: "{label} ({y})",
+                dataPoints: <?php echo json_encode($dataPointsExpenses, JSON_NUMERIC_CHECK); ?>
+            }]
+        });
+        chartExpenses.render();
+        
         }
 
 
@@ -394,20 +385,8 @@
                                 </table>
                             </div>
                         </div>
-
-                        <div class="charts">
-                            <div class="pie-chart-incomings-container">
-                                <canvas id="pie-chart-incomings" width="200" height="200">
-                                </canvas>
-                                <ul id="pie-chart-legend__incomings"></ul>
-                            </div>
-
-                            <div class="pie-chart-expenses-container">
-                                <canvas id="pie-chart-expenses" width="200" height="200">
-                                </canvas>
-                                <ul id="pie-chart-legend__expenses"></ul>
-                            </div>
-                        </div>
+                            <div id="pie-chart-incomes-container" style="height: 300px; width: 100%;"></div>
+                            <div id="pie-chart-expenses-container" style="height: 300px; width: 100%;"></div>
 
                         <div id="calculation">
                                 <?php
@@ -431,6 +410,7 @@
             </div>
         </div>
     </article>
+    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
 </body>
 
 </html>

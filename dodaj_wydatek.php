@@ -17,15 +17,21 @@
         $all_OK = true;
     
         if (isset($_POST['price'])) {
-            $price = $_POST['price'];
+            $price = str_replace(',','.',$_POST['price']);
     
-            if (!is_numeric($price)) {
+            if (!is_numeric($price) || empty($price)) {
                 $_SESSION['error_price'] = 'Podaj kwotę w formacie liczbowym.';
                 $all_OK = false;
             }
+
+            if (empty($_POST['category'])) {
+                $_SESSION['expense_category'] = 'Wybierz kategorię wydatku.';
+                $all_OK = false;
+            } else {
+                $expense_category = $_POST['category'];
+            }
     
             if ($all_OK) {
-                $expense_category = $_POST['category'];
                 $payment_method = $_POST['paymentMethod'];
                 $date_expense = $_POST['date'];
                 $user_id = $_SESSION['user_id']; 
@@ -145,7 +151,8 @@
                     <span class="icon-container"><i class="icon-pencil"></i></span>
                     <input type="text" name="price" class="form-control" placeholder="Kwota">
                 </div>
-
+                
+        <div class="error">
             <?php
                 
                 if (isset($_SESSION['error_price'])) {
@@ -154,6 +161,7 @@
                 }
 
             ?>
+        </div>
 
                 <div class="input-group">
                     <span class="icon-container"><i class="icon-calendar"></i></span>
@@ -194,6 +202,16 @@
                             <option>Inne wydatki</option>
                         </select>
                     </label>
+                    <div class="error" style = "color: red">
+                        <?php
+                            
+                            if (isset($_SESSION['error_category'])) {
+                                echo $_SESSION['error_category'];
+                                unset($_SESSION['error_category']); 
+                            }
+
+                        ?>
+                    </div>
                 </div>
 
                 <div class="input-group">

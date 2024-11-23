@@ -113,17 +113,6 @@ h3 {
     margin-top: 2px
 }
 
-
-.charts {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-around;
-    background-color: rgba(155, 224, 224, 0.5);
-    border-radius: 15px;
-    padding: 10px
-}
-
 .header-category {
     background-color: rgb(165, 60, 19);
 }
@@ -132,14 +121,6 @@ h3 {
     background-color: rgb(128, 37, 212);
 }
 
-.pie-chart-incomings-container,
-.pie-chart-expenses-container {
-    width: 100%;
-}
-
-.pie-chart-expenses-container {
-    margin-left: 80px;
-}
 
 .legend-item {
     display: flex;
@@ -152,13 +133,6 @@ h3 {
     height: 20px;
     border-radius: 50%;
     display: inline-block;
-}
-
-#pie-chart-legend__incomings,
-#pie-chart-legend__expenses {
-    text-align: left;
-    margin: 0;
-    padding: 0
 }
 
 input[value="Wybierz okres"]:hover {
@@ -194,6 +168,7 @@ input[value="Wybierz okres"]:hover {
     padding: 10px;
     margin-bottom: 30px;
 }
+
 
 @media(max-width: 768px) {
     #menu-desktop {
@@ -264,18 +239,6 @@ input[value="Wybierz okres"]:hover {
         padding: 0
     }
 
-    .charts {
-        flex-direction: column;
-        background-color: rgba(155, 224, 224, 0.5);
-        border-radius: 15px;
-        padding: 10px
-    }
-
-    .pie-chart-expenses-container {
-        margin-left: 0;
-        margin-top: 40px;
-    }
-
     input[type="text"]:focus{
         outline: none;
         box-shadow: 0 0 10px rgb(17, 53, 48);
@@ -322,32 +285,6 @@ input[value="Wybierz okres"]:hover {
     .container-inside {
         padding-left: 15px;
         padding-right: 15px
-    }
-
-    .pie-chart-incomings-container,
-    .pie-chart-expenses-container {
-        box-sizing: border-box;
-    }
-
-    .charts {
-        position: relative;
-        background-color: rgba(155, 224, 224, 0.5);
-        border-radius: 15px;
-        padding: 10px
-    }
-
-    #pie-chart-incomings {
-        display: block;
-        max-width: 160px;
-        margin: 0 auto;
-        height: auto
-    }
-
-    #pie-chart-expenses {
-        display: block;
-        max-width: 160px;
-        margin: 0 auto;
-        height: auto
     }
 
     .legend-color {
