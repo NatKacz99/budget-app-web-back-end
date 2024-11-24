@@ -15,6 +15,19 @@
         $connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
         $all_OK = true;
+
+        $user_id = $_SESSION['user_id']; 
+        $stmt_all_categories = $connect->prepare("SELECT name FROM expenses_category_assigned_to_users
+                                             WHERE user_id = :user_id");
+        $stmt_all_categories->bindParam(':user_id', $user_id);
+        $stmt_all_categories->execute();
+        $all_categories_result = $stmt_all_categories->fetchAll(PDO::FETCH_ASSOC);
+
+        $stmt_all_payment_methods = $connect->prepare("SELECT name FROM payment_methods_assigned_to_users
+                                             WHERE user_id = :user_id");
+        $stmt_all_payment_methods->bindParam(':user_id', $user_id);
+        $stmt_all_payment_methods->execute();
+        $all_payment_methods_result = $stmt_all_payment_methods->fetchAll(PDO::FETCH_ASSOC);
     
         if (isset($_POST['price'])) {
             $price = str_replace(',','.',$_POST['price']);
@@ -34,7 +47,6 @@
             if ($all_OK) {
                 $payment_method = $_POST['paymentMethod'];
                 $date_expense = $_POST['date'];
-                $user_id = $_SESSION['user_id']; 
                 $comment = $_POST['comment'];
             
                 $stmt_category = $connect->prepare("SELECT id FROM expenses_category_assigned_to_users WHERE user_id = :user_id AND name = :expense_category");
@@ -89,6 +101,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <script src="./js/bootstrap.min.js"></script>
     
 
     <link rel="stylesheet" href="style_dodaj_wydatek.css">
@@ -163,18 +177,21 @@
             ?>
         </div>
 
+                <?php $current_day = date('Y-m-d'); ?>
                 <div class="input-group">
                     <span class="icon-container"><i class="icon-calendar"></i></span>
-                    <input type="text" name="date" class="datepicker form-control" placeholder="Data">
+                    <input type="text" name="date" class="datepicker form-control" value="<?php echo $current_day ?>">
                 </div>
 
                 <div>
                     <label for="payment-method">
                         <select class="payment-method" name="paymentMethod">
                             <option selected disabled>Wybierz sposób płatności</option>
-                            <option>Gotówka</option>
-                            <option>Karta debetowa</option>
-                            <option>Karta kredytowa</option>
+                            <?php
+                                foreach ($all_payment_methods_result as $row) {
+                                    echo '<option>' . htmlspecialchars($row['name']) . '</option>';
+                                }
+                            ?>
                         </select>
                     </label>
                 </div>
@@ -183,23 +200,11 @@
                     <label for="category">
                         <select class="category" name="category">
                             <option selected disabled>Wybierz kategorię wydatku</option>
-                            <option>Jedzenie</option>
-                            <option>Mieszkanie</option>
-                            <option>Transport</option>
-                            <option>Telekomunikacja</option>
-                            <option>Opieka zdrowotna</option>
-                            <option>Ubranie</option>
-                            <option>Higiena</option>
-                            <option>Dzieci</option>
-                            <option>Rozrywka</option>
-                            <option>Wycieczka</option>
-                            <option>Szkolenia</option>
-                            <option>Książki</option>
-                            <option>Oszczędności</option>
-                            <option>Na złotą jesień, czyli emeryturę</option>
-                            <option>Spłata długów</option>
-                            <option>Darowizna</option>
-                            <option>Inne wydatki</option>
+                            <?php
+                                foreach ($all_categories_result as $row) {
+                                    echo '<option>' . htmlspecialchars($row['name']) . '</option>';
+                                }
+                            ?>
                         </select>
                     </label>
                     <div class="error" style = "color: red">

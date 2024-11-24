@@ -191,43 +191,63 @@
 
         window.onload = function() {
         
-        var chartIncomes = new CanvasJS.Chart("pie-chart-incomes-container", {
-            animationEnabled: true,
-            backgroundColor: "rgba(155, 224, 224, 0.5)",
+            var chartIncomes = new CanvasJS.Chart("pie-chart-incomes-container", {
+                animationEnabled: true,
+                backgroundColor: "rgba(155, 224, 224, 0.5)",
 
-            title: {
-                text: "Przychody"
-            },
+                title: {
+                    text: "Przychody"
+                },
 
-            data: [{
-                type: "pie",
-                yValueFormatString: "#,##0.00\"%\"",
-                indexLabel: "{label} ({y})",
-                dataPoints: <?php echo json_encode($dataPointsIncomes, JSON_NUMERIC_CHECK); ?>
-            }]
+                data: [{
+                    type: "pie",
+                    yValueFormatString: "#,##0.00\"%\"",
+                    indexLabel: "{label} ({y})",
+                    dataPoints: <?php echo json_encode($dataPointsIncomes, JSON_NUMERIC_CHECK); ?>
+                }]
+            });
+            chartIncomes.render();
+    
+    
+            var chartExpenses = new CanvasJS.Chart("pie-chart-expenses-container", {
+                animationEnabled: true,
+                backgroundColor: "rgba(155, 224, 224, 0.5)",
+
+                title: {
+                    text: "Wydatki"
+                },
+
+                data: [{
+                    type: "pie",
+                    yValueFormatString: "#,##0.00\"%\"",
+                    indexLabel: "{label} ({y})",
+                    dataPoints: <?php echo json_encode($dataPointsExpenses, JSON_NUMERIC_CHECK); ?>
+                }]
+            });
+            chartExpenses.render();
+            
+            }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const resultsIncomes = <?php echo json_encode($results_incomes); ?>;
+            const resultsExpenses = <?php echo json_encode($results_expenses); ?>;
+            const chartExpensesDiv = document.getElementById("pie-chart-expenses-container");
+            const chartIncomesDiv = document.getElementById("pie-chart-incomes-container");
+            const divTables = document.getElementsByClassName("tables-incomes-expenses")[0];
+            const calculationDiv = document.getElementById("calculation");
+            if((!resultsIncomes || resultsIncomes.length === 0) && (!resultsExpenses || resultsExpenses.length === 0))  {
+                calculationDiv.style.display = "none";
+                chartExpensesDiv.style.display = "none";
+                chartIncomesDiv.style.display = "none";
+                divTables.style.marginBottom = "30px";
+            }
+            else if(!resultsIncomes || resultsIncomes.length === 0){
+                chartIncomesDiv.style.display = "none";
+            }
+            else if(!resultsExpenses || resultsExpenses.length === 0){
+                chartExpensesDiv.style.display = "none";
+            }
         });
-        chartIncomes.render();
- 
- 
-        var chartExpenses = new CanvasJS.Chart("pie-chart-expenses-container", {
-            animationEnabled: true,
-            backgroundColor: "rgba(155, 224, 224, 0.5)",
-
-            title: {
-                text: "Wydatki"
-            },
-
-            data: [{
-                type: "pie",
-                yValueFormatString: "#,##0.00\"%\"",
-                indexLabel: "{label} ({y})",
-                dataPoints: <?php echo json_encode($dataPointsExpenses, JSON_NUMERIC_CHECK); ?>
-            }]
-        });
-        chartExpenses.render();
-        
-        }
-
 
         $(function () {
             $(".datepicker").datepicker({
@@ -409,16 +429,16 @@
                                     $balance = $total_sum_incomes - $total_sum_expenses;
                                     $balance_sheet = $balance." zł";
                                 ?>
-                        <span>
-                            <h3>Bilans</h3>
-                                <?php if ($balance < 0) { ?>
-                                    <h3 style = "color: red"><?php echo $balance_sheet; ?></h3> 
-                                    <div id="balance-negative-message"><?php echo "Uważaj, wpadasz w długi!"; ?></div>
-                                <?php } else if ($balance > 0) { ?>
-                                    <h3 style = "color: green"><?php echo $balance_sheet; ?></h3> 
-                                    <div id="balance-positive-message"><?php echo "Gratulacje. Świetnie zarządzasz finansami!"; ?></div>
-                                <?php } ?>
-                         </span>
+                            <span>
+                                <h3>Bilans</h3>
+                                    <?php if ($balance < 0) { ?>
+                                        <h3 style = "color: red"><?php echo $balance_sheet; ?></h3> 
+                                        <div id="balance-negative-message"><?php echo "Uważaj, wpadasz w długi!"; ?></div>
+                                    <?php } else if ($balance > 0) { ?>
+                                        <h3 style = "color: green"><?php echo $balance_sheet; ?></h3> 
+                                        <div id="balance-positive-message"><?php echo "Gratulacje. Świetnie zarządzasz finansami!"; ?></div>
+                                    <?php } ?>
+                            </span>
                         </div>
 
                     </div>

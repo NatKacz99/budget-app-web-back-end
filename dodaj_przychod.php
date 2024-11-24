@@ -15,6 +15,13 @@
         $connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
         $all_OK = true;
+
+        $user_id = $_SESSION['user_id'];
+        $stmt_all_categories = $connect->prepare("SELECT name FROM incomes_category_assigned_to_users
+                                                WHERE user_id = :user_id");
+        $stmt_all_categories->bindParam(':user_id', $user_id);
+        $stmt_all_categories->execute();
+        $all_categories_result = $stmt_all_categories->fetchAll(PDO::FETCH_ASSOC);
     
         if (isset($_POST['price'])) {
             $price = str_replace(',','.',$_POST['price']);
@@ -32,8 +39,7 @@
             }
     
             if ($all_OK) {
-                $date_income = $_POST['date'];
-                $user_id = $_SESSION['user_id']; 
+                $date_income = $_POST['date'];   
                 $comment = $_POST['comment'];
             
                 $stmt_category = $connect->prepare("SELECT id FROM incomes_category_assigned_to_users WHERE user_id = :user_id AND name = :income_category");
@@ -80,6 +86,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <script src="./js/bootstrap.min.js"></script>
     
 
     <link rel="stylesheet" href="style_dodaj_wydatek.css">
@@ -154,9 +162,10 @@
             ?>
         </div>
 
+                <?php $current_day = date('Y-m-d'); ?>
                 <div class="input-group">
                     <span class="icon-container"><i class="icon-calendar"></i></span>
-                    <input type="text" name="date" class="datepicker form-control" placeholder="Data">
+                    <input type="text" name="date" class="datepicker form-control" value="<?php echo $current_day; ?>">
                 </div>
 
 
@@ -164,10 +173,11 @@
                     <label for="category">
                         <select class="category" name="category">
                             <option selected disabled>Wybierz kategorię przychodu</option>
-                            <option>Wynagrodzenie</option>
-                            <option>Odsetki bankowe</option>
-                            <option>Sprzedaż na allegro</option>
-                            <option>Inne</option>
+                            <?php
+                                foreach ($all_categories_result as $row) {
+                                    echo '<option>' . htmlspecialchars($row['name']) . '</option>';
+                                }
+                            ?>
                         </select>
                     </label>
                     <div class="error" style = "color: red">

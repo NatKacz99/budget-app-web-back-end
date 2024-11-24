@@ -1,5 +1,6 @@
 body {
     background-color: rgb(76, 141, 141);
+    height: 100vh
 }
 
 .container-outside {
@@ -21,7 +22,7 @@ body {
 .menu-desktop__list {
     display: flex;
     justify-content: space-between !important;
-    margin: 0 !important;
+    margin: 0;
     padding-left: 20px !important;
     padding-right: 20px !important;
 }
@@ -133,19 +134,6 @@ h3 {
 
 .header-comment {
     background-color: #3137ab;
-}
-
-.legend-item {
-    display: flex;
-    margin-top: 20px;
-    gap: 15px;
-}
-
-.legend-color {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: inline-block;
 }
 
 input[value="Wybierz okres"]:hover {
