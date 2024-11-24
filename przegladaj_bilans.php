@@ -59,7 +59,7 @@
                     break;
             }
 
-            $stmt = $pdo->prepare("SELECT name AS kategoria_wydatku, SUM(amount) AS kwota_wydatku, date_of_expense, expense_comment    FROM expenses
+            $stmt = $pdo->prepare("SELECT name AS kategoria_wydatku, SUM(amount) AS kwota_wydatku  FROM expenses
                                 JOIN expenses_category_assigned_to_users ON expenses_category_assigned_to_users.id = expenses.expense_category_assigned_to_user_id
                                 WHERE expenses.user_id = :user_id 
                                 AND date_of_expense BETWEEN :start_day AND :end_day
@@ -76,8 +76,7 @@
             $how_many_categories_expenses = $stmt->rowCount();
 
 
-            $stmt = $pdo->prepare("SELECT name AS kategoria_przychodu, SUM(amount) AS kwota_przychodu, 
-            date_of_income, income_comment FROM incomes
+            $stmt = $pdo->prepare("SELECT name AS kategoria_przychodu, SUM(amount) AS kwota_przychodu FROM incomes
                                 JOIN incomes_category_assigned_to_users ON incomes_category_assigned_to_users.id = incomes.income_category_assigned_to_user_id
                                 WHERE incomes.user_id = :user_id 
                                 AND date_of_income BETWEEN :start_day AND :end_day
@@ -94,6 +93,36 @@
             $how_many_categories_incomes = $stmt->rowCount();
 
         }
+
+        else{
+            $stmt = $pdo->prepare("SELECT name AS kategoria_wydatku, SUM(amount) AS kwota_wydatku, date_of_expense, expense_comment    FROM expenses
+                                    JOIN expenses_category_assigned_to_users ON expenses_category_assigned_to_users.id = expenses.expense_category_assigned_to_user_id
+                                    WHERE expenses.user_id = :user_id 
+                                    GROUP BY expense_category_assigned_to_user_id
+                                    ORDER BY kwota_wydatku DESC");
+    
+                $stmt->bindParam(':user_id', $user_id);
+    
+                $stmt->execute();
+                $results_expenses = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+                $how_many_categories_expenses = $stmt->rowCount();
+    
+    
+                $stmt = $pdo->prepare("SELECT name AS kategoria_przychodu, SUM(amount) AS kwota_przychodu, 
+                date_of_income, income_comment FROM incomes
+                                    JOIN incomes_category_assigned_to_users ON incomes_category_assigned_to_users.id = incomes.income_category_assigned_to_user_id
+                                    WHERE incomes.user_id = :user_id 
+                                    GROUP BY income_category_assigned_to_user_id
+                                    ORDER BY kwota_przychodu DESC");
+    
+                $stmt->bindParam(':user_id', $user_id);
+    
+                $stmt->execute();
+                $results_incomes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+                $how_many_categories_incomes = $stmt->rowCount();
+            }
 
             $dataPointsIncomes = [];
             $total_sum_incomes = 0;
@@ -127,7 +156,7 @@
                 }
             }
 
-    }
+    } 
     }   catch(PDOException $error) {
         echo '<span style="color: red">Błąd serwera! Przepraszamy za niedogodności i zapraszamy do wizyty w innym terminie!</span>';
         echo $error->getMessage();
@@ -216,34 +245,13 @@
             });
         });
 
-        document.addEventListener("DOMContentLoaded", function () {
-            const timePeriodSelect = document.getElementById("time-slot");
-            const calculationDiv = document.getElementById("calculation");
-            const chartsContainer = document.getElementsByClassName("charts")[0];
-
-            if (!timePeriodSelect.value || timePeriodSelect.value === "Wybierz okres czasu") {
-                calculationDiv.style.display = "none";
-                chartsContainer.style.marginBottom = "30px";
-            }
-         });
-
         function handleTimeSlotChange(select) {
-            const timePeriodSelect = document.getElementById("time-slot");
-            const calculationDiv = document.getElementById("calculation");
-            const chartsContainer = document.getElementsByClassName("charts")[0];
-            
             if (select.value !== "niestandardowy") {
                 select.form.submit();
             } else {
                 $('#myModal').modal('show');
             }
 
-            if (timePeriodSelect.value && timePeriodSelect.value !== "Wybierz okres czasu") {
-            calculationDiv.style.display = "block"; 
-            } else {
-                calculationDiv.style.display = "none"; 
-                chartsContainer.style.marginBottom = "30px";
-            }
         }
 
 
@@ -297,27 +305,28 @@
                                 </label>
                             </div>
 
+                            <?php $current_day = date('Y-m-d'); ?>
                             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                <div class="modal-body">
-                                    Zakres od:
-                                        <div class="input-group">
-                                            <span class="icon-container"><i class="icon-calendar"></i></span>
-                                            <input type="text" name="start_day" class="datepicker form-control" placeholder="Data początkowa">
-                                        </div>
-                                    do: 
-                                        <div class="input-group">
-                                            <span class="icon-container"><i class="icon-calendar"></i></span>
-                                                <input type="text" name="end_day" class="datepicker form-control" placeholder="Data końcowa">
-                                         </div>
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                    <div class="modal-body">
+                                        Zakres od:
+                                            <div class="input-group">
+                                                <span class="icon-container"><i class="icon-calendar"></i></span>
+                                                <input type="text" name="start_day" class="datepicker form-control" value="<?php echo $current_day ?>">
+                                            </div>
+                                        do: 
+                                            <div class="input-group">
+                                                <span class="icon-container"><i class="icon-calendar"></i></span>
+                                                    <input type="text" name="end_day" class="datepicker form-control" value="<?php echo $current_day ?>">
+                                            </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Zamknij</button>
+                                        <button type="submit" class="btn btn-success">Zapisz zmiany</button>
+                                    </div>
+                                    </div>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Zamknij</button>
-                                    <button type="submit" class="btn btn-success">Zapisz zmiany</button>
-                                </div>
-                                </div>
-                            </div>
                             </div>
                         </div>
                     </form>
@@ -333,8 +342,6 @@
                                         <tr>
                                             <th class="header-category">Kategoria</th>
                                             <th class="header-amount">Kwota (zł)</th>
-                                            <th class="header-date">Data</th>
-                                            <th class="header-comment">Komentarz</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -348,16 +355,12 @@
                                                     echo "<tr>
                                                         <td>{$row['kategoria_przychodu']}</td>
                                                         <td>{$row['kwota_przychodu']}</td>
-                                                        <td>{$row['date_of_income']}</td>
-                                                        <td>";
-                                                        echo !empty($row['income_comment']) ? $row['income_comment'] : "Brak";
-                                                        echo "</td>
-                                                    </tr>";
+                                                        </tr>";
                                                     $total_sum_incomes += $row['kwota_przychodu'];
                                                 }
                                                 
                                                 if($how_many_categories_incomes > 1){
-                                                    echo "<tr><td><b>Suma całkowita<b/></td><td colspan='3'>{$total_sum_incomes}</td></tr>";
+                                                    echo "<tr><td><b>Suma całkowita<b/></td><td>{$total_sum_incomes}</td></tr>";
                                                 }
                                             }
                                         ?>
@@ -372,8 +375,6 @@
                                         <tr>
                                             <th class="header-category">Kategoria</th>
                                             <th class="header-amount">Kwota (zł)</th>
-                                            <th class="header-date">Data</th>
-                                            <th class="header-comment">Komentarz</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -386,18 +387,13 @@
                                                 foreach ($results_expenses as $row) {
                                                     echo "<tr>
                                                             <td>{$row['kategoria_wydatku']}</td>
-                                                            <td>{$row['kwota_wydatku']}</td>
-                                                            <td>{$row['date_of_expense']}</td>
-                                                            <td>";
-                                                            echo !empty($row['expense_comment']) ? $row['expense_comment'] : "Brak";
-                                                            echo "</td>
-                                                        
+                                                            <td>{$row['kwota_wydatku']}</td>                                   
                                                         </tr>";
                                                     $total_sum_expenses += $row['kwota_wydatku'];
                                                 }
                                                 
                                                 if($how_many_categories_expenses > 1){
-                                                    echo "<tr><td><b>Suma całkowita<b/></td><td colspan='3'>{$total_sum_expenses}</td></tr>";
+                                                    echo "<tr><td><b>Suma całkowita<b/></td><td>{$total_sum_expenses}</td></tr>";
                                                 }
                                             }
                                         ?>
